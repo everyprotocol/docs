@@ -111,7 +111,8 @@
   "footer": {
     "socials": {
       "x": "https://x.com/everyprotocol",
-      "github": "https://github.com/everyprotocol"
+      "github": "https://github.com/everyprotocol",
+      "website": "https://everyfun.vercel.app"
     }
   }
 }

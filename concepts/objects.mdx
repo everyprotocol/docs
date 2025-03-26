@@ -14,22 +14,14 @@ Sets define minting rules, permissions, and serve as the source of truth for all
 
 Like ERC721 contracts, a set can mint multiple unique tokens. But in Every Protocol, those tokens are full-featured objects with rich structure and behavior.
 
-## Token Records
+## Token Records Comparison
 
-// ai! put them in a table
-In traditional token standards:
-- **ERC20** tokens store balances per address.
-- **ERC721** tokens map each token ID to an owner and optional metadata URI.
-- **ERC1155** tokens combine both, supporting multiple types in one contract.
-
-// ai! put object records in the same table, so that we can compare
-In Every Protocol, each object has a **record** — a structured onchain representation of its content and behavior.
-An object’s record can include:
-
-- **Meta** – name, description, timestamps, and other common fields
-- **Elements** – the components that make up the object (see below)
-- **Connections** – links to other objects, sets, or external resources
-- **Facets** – modular extensions that define how the object is rendered, interacted with, or computed
+| Standard | Storage Structure | Key Features |
+|----------|-------------------|-------------|
+| **ERC20** | `address => balance` | Fungible tokens, simple transfers |
+| **ERC721** | `tokenId => (owner, metadataURI)` | Non-fungible tokens (NFTs), unique assets |
+| **ERC1155** | `(address, tokenId) => balance` | Hybrid fungible/non-fungible, batch operations |
+| **Every Protocol** | `tokenId => (owner, state)` + `tokenId => position` | Structured objects with:<br>- Meta data<br>- Element components<br>- Relations<br>- Facets |
 
 Records are composable and versioned, supporting co-creation, upgrades, and reproducible object evolution.
 

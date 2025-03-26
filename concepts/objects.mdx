@@ -1,60 +1,48 @@
-Objects are the fundamental unit of Every Protocol. They extend the idea of tokens by giving them structure, semantics, and the ability to interact. This makes them more than just assets — they’re programmable, evolvable, and interoperable digital entities.
-
-## Tokens and token contracts
-
-The OpenZeppelin documentation[^note] explains the distinction:
+The OpenZeppelin documentation[^note] provides a clear explanation of the distinction between tokens and token contracts:
 
 > *Token contracts are smart contracts that manage token balances and operations, while tokens themselves are the digital assets represented by those balances.*
 
-Traditional tokens maintain simple mappings like:
-Every object is a token, and it is minted from a smart contract called a **set**.
-Sets define minting rules, permissions, and serve as the source of truth for all objects they produce.
+[^note]: [OpenZeppelin Docs – Tokens](https://docs.openzeppelin.com/contracts/4.x/tokens)
 
-Like ERC721 contracts, a set can mint multiple unique tokens. But in Every Protocol, those tokens are full-featured objects with rich structure and behavior.
+Compared to existing standards, **object tokens** store more structured and extensible data within token contracts. Additionally, data related to **interoperations** — often involving multiple token contracts — is maintained in a shared onchain contract called the **Omni Registry**.
 
-## Token Records Comparison
+## Storage
 
-| Standard | Storage Structure | Key Features |
-|----------|-------------------|-------------|
-| **ERC20** | `address => balance` | Fungible tokens, simple transfers |
-| **ERC721** | `tokenId => (owner, metadataURI)` | Non-fungible tokens (NFTs), unique assets |
-| **ERC1155** | `(address, tokenId) => balance` | Hybrid fungible/non-fungible, batch operations |
-| **Every Protocol** | `tokenId => (owner, state)` + `tokenId => position` | Structured objects with: • Meta data • Element components • Relations • Facets |
+Different token standards store different kinds of data in their contracts. Object tokens introduce a richer structure at the contract level and delegate shared operations — like positioning and connections — to the **Omni Registry**.
 
-Records are composable and versioned, supporting co-creation, upgrades, and reproducible object evolution.
+| Standard    | Token Contract Storage                                                  | Omni Registry Storage         |
+|-------------|-------------------------------------------------------------------------|-------------------------------|
+| **ERC20**   | `map(owner => balance)`                                                 | —                             |
+| **ERC721**  | `map(id => owner)`<br/>`map(id => uri)`                                 | —                             |
+| **ERC1155** | `map(owner => id => balance)`<br/>`map(id => uri)`                      | —                             |
+| **Objects** | `map(id => owner)`<br/>`map(id => metadata)`<br/>`map(id => elements)`  | `map(id => position)`         |
 
-## Meta, elements, connections, facets
+## Properties
 
-- **Meta**: standard fields like title, creator, timestamps, and tags
-- **Elements**:
-  - **Matter** – digital assets (e.g. image, model, code)
-  - **Values** – balances of fungible tokens (like ERC20)
-  - **Uniques** – ownership of specific NFTs or identifiers (like ERC721)
-  - **Info** – raw or structured data blobs
-- **Connections**: relations to other objects, sets, kinds, or offchain resources
-- **Facets**: optional modules that describe how to display, compute, or interact with the object
+The table below outlines the key properties tracked by various token types. Object tokens extend this list with composable content, structured metadata, and spatial logic.
 
-## Basic operations
+| Property     | Description                                                                 |
+|--------------|-----------------------------------------------------------------------------|
+| **id**       | A unique identifier within a set (non-fungible only)                        |
+| **owner**    | The address that currently owns the token                                   |
+| **balance**  | Amount held by an address (for fungible or semi-fungible tokens)            |
+| **uri**      | A metadata URI (used in ERC721 and ERC1155 only)                            |
+| **metadata** | Structured metadata stored onchain (unique to object tokens)                |
+| **elements** | Modular components such as matter, values, uniques, and info                |
+| **position** | Logical or spatial location, used for linking and layout                    |
 
-Objects support familiar token operations:
+## Operations
 
-- **mint** – create a new object from a set
-- **transfer** – move ownership
-- **burn** – destroy the object (optional)
-- **update** – edit or add elements (according to rules set by the kind or set)
+We're already familiar with standard operations like `mint`, `transfer`, and `burn`.
+Object tokens introduce additional operations that support **mutation**, **evolution**, and **interoperation** — all native to the protocol.
 
-Since objects are structured, these operations can include content updates, dependency changes, or computed mutations.
-
-## Inter operations
-
-Objects can also interact with one another through **relations** — kind-defined rules that describe how objects connect.
-
-For example:
-
-- An object can *reference* another (like a parent-child or composition)
-- Objects can form *networks* (e.g. social graphs, supply chains)
-- Interactions can trigger *computed updates* (e.g. combining objects, unlocking upgrades)
-
-These interactions are native to Every Protocol, enabling secure and verifiable co-creation, remixing, and evolution across users and applications.
-
-Let me know if you’d like this broken into smaller pages or if you want any diagrams or embedded components for Mintlify!
+| Operation    | Description                                              | Implemented In     | Affected Properties                     |
+|--------------|----------------------------------------------------------|--------------------|------------------------------------------|
+| **mint**     | Create a new object from a set                           | Token Contract      | `owner`, `metadata`, `elements`         |
+| **transfer** | Change the ownership of an object                        | Token Contract      | `owner`                                  |
+| **burn**     | Permanently remove an object                             | Token Contract      | `owner`, `metadata`                      |
+| **update**   | Modify an object’s metadata or elements                  | Token Contract      | `metadata`, `elements`                   |
+| **upgrade**  | Apply kind-defined upgrades to the object                | Token Contract      | `metadata`                               |
+| **relate**   | Establish a relation between objects                     | Omni Registry       | `position`                               |
+| **unrelate** | Remove a relation between objects                        | Omni Registry       | `position`                               |
+| **move**     | Change an object’s spatial or logical position           | Omni Registry       | `position`                               |

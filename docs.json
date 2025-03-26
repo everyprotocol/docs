@@ -18,8 +18,15 @@
         "tab": "Learn",
         "groups": [
           {
-            "group": "Get Started",
-            "pages": ["introduction", "quickstart", "development"]
+            "group": "Basics",
+            "pages": [
+              "concepts/overview",
+              "concepts/objects",
+              "concepts/elements",
+              "concepts/kinds",
+              "concepts/sets",
+              "concepts/relations"
+            ]
           },
           {
             "group": "Essentials",

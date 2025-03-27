@@ -75,16 +75,17 @@
         "tab": "Network",
         "groups": [
           {
-            "group": "API Documentation",
-            "pages": ["api-reference/introduction"]
-          },
-          {
-            "group": "Endpoint Examples",
+            "group": "Network",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "network/overview",
+              "network/accounts",
+              "network/transactions",
+              "network/chain-state",
+              "network/kind-contracts",
+              "network/ovm",
+              "network/tokenomics",
+              "network/nodes",
+              "network/deployment"
             ]
           }
         ]

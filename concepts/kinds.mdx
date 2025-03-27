@@ -1,94 +1,56 @@
-A **kind** is an meta object that defines (of a group of objects)the composition, appearance and interactions with other objects.
+A **Kind** is a meta-object that defines the **structure, appearance, and interactions** of a group of objects. It serves as the blueprint — determining what elements an object has, how its assets are computed, and how it interacts with other objects.
 
 ## Metadata
 
-Kind metadata contains essential information about the object's type and versioning. It follows a standardized structure:
+The metadata of a kind contains essential information about its type and versioning.
 
-| Field     | Value                  | Description                          |
-|-----------|------------------------|--------------------------------------|
-| flags     | 0                      | Status flags (reserved for future use) |
-| rev       | 1                      | Current revision number              |
-| kindRev   | latestKindOfKind()      | Revision of the Kind of Kind         |
-| setRev    | latestSetOfKind()       | Revision of the Set of Kind          |
-| kind      | ID_KIND_OF_KIND        | Kind ID (always points to Kind of Kind) |
-| set       | ID_SET_OF_KIND         | Set ID (always points to Set of Kind) |
+| Field     | Value                   | Description                              |
+|-----------|-------------------------|------------------------------------------|
+| `flags`   | `0`                     | Status flags (reserved for future use)   |
+| `rev`     | `1`                     | Current revision number                  |
+| `kindRev` | `latestKindOfKind()`    | Revision of the Kind of Kind             |
+| `setRev`  | `latestSetOfKind()`     | Revision of the Set of Kind              |
+| `kind`    | `ID_KIND_OF_KIND`       | Kind ID (always points to Kind of Kind)  |
+| `set`     | `ID_SET_OF_KIND`        | Set ID (always points to Set of Kind)    |
 
 ## Elements
 
-Kinds are structured using elements, just like other objects — but the element slots have special meaning. The element layout is defined by the **Kind of Kind**.
+Each kind has **6 elements**. These elements are defined by its own kind — the **Kind of Kind** — and serve as building blocks for both definition and execution.
 
-| Index | Name   | Mutable | Description                                                  |
-|-------|--------|---------|--------------------------------------------------------------|
-| 0     | shape  | No      | Declares element types for objects of this kind              |
-| 1     | code   | Yes     | Material hash of the kind contract (Wasm code)               |
-| 2     | gene   | Yes     | Shared data/config for all objects of this kind              |
-| 3     | rels0  | Yes     | Supported incoming relation IDs (up to 8)                    |
-| 4     | rels1  | Yes     | Supported outgoing relation IDs (up to 8)                    |
-
-### code
-
-The `code` element contains the material hash of the kind contract. This is Wasm code executed by the observer chain (Every Network) through the OVM. It defines dynamic behaviors like rendering, transformations, or computed responses.
-
-### shape
-
-The `shape` element defines the element layout for objects of this kind — i.e., what types of elements they must include.
-
-Encoded as a `uint8[]` of length 0–16. Supported values:
-
-| Value | Type               |
-|-------|--------------------|
-| 1     | OBJECT             |
-| 2     | INFORMATION        |
-| 3     | VALUE              |
-| 4     | ARTIFACT           |
-| 5     | MATERIAL_GENERAL   |
-| 6     | MATERIAL_JSON      |
-| 7     | MATERIAL_PTABLE    |
-| 8     | MATERIAL_MKTREE    |
-| 9     | MATERIAL_IMAGE     |
-
-### gene
-
-The `gene` is a shared configuration element — often JSON — that applies to all objects of this kind. It may include:
-
-- `name`
-- `description`
-- `image`
-- Additional kind-specific fields
-
-### relations
-
-Kinds can express interaction rules via two relation fields:
-
-- `rels0` — Supported incoming relation IDs
-- `rels1` — Supported outgoing relation IDs
-
-Each field is a 64-byte sequence containing up to 8 `uint64` relation IDs (big-endian). Remaining slots are zero-padded.
-
-## Usage
-
-Kinds are essential throughout Every Protocol:
-
-- **In sets** — Each object minted from a set is assigned a kind
-- **In relations** — Relation rules are defined between kinds
-- **In runtime** — The Every Network executes kind logic to interpret and render objects
+| Index | Element   | Type   | Mutable | Description                                                 |
+|-------|-----------|--------|---------|-------------------------------------------------------------|
+| `0`   | `shape`   | Info   | No      | Declares element types for objects of this kind             |
+| `1`   | `code`    | Matter | Yes     | Hash of the kind contract                                   |
+| `2`   | `bundle`  | Matter | Yes     | Hash of a bundle, containing committed matters and infos    |
+| `3`   | `rels0`   | Info   | Yes     | Supported relations (part 1)                                |
+| `4`   | `rels1`   | Info   | Yes     | Supported relations (part 2)                                |
 
 ## Kind Contract
 
-The kind contract is Wasm code that defines programmable behavior for a kind. It is referenced in the `code` element and executed through the observer network (Every Network) using the OVM.
+A **Kind Contract** is a `Matter` in code form that defines how an object's assets are derived from its elements. It provides programmable logic for rendering, verification, or computation, enabling dynamic and expressive objects.
 
-### Facet Function
+Kind contracts can currently be written in **AssemblyScript**, compiled to WebAssembly using `kind-as`. A Rust toolkit is planned but not yet available.
 
-A kind contract exposes a **facet function** — the universal entry point for logic such as rendering, computing, or verifying object assets.
+```ts
+@kind
+class Hat {
+  design: MatterImage;
+  background: MatterImage;
 
-### Selector
+  function meta(): Json {
+    // return metadata
+  }
 
-The **selector** is a unique identifier (usually a function signature) used to dispatch calls to the facet function.
+  function picture(): Image {
+    // compute main image
+  }
 
-### Image
+  function figure(): Image {
+    // compute figure
+  }
+}
+```
 
-Kinds can define how an object’s image or asset is computed based on its content (e.g., matter, gene, or other elements). This image is generated dynamically by the kind contract during execution.
-
----
-
-Kinds provide the foundation for object semantics and computation in Every Protocol. By separating type definitions into programmable, composable kind objects, Every Protocol enables a fully modular, extensible system for onchain creation and collaboration.
+ * Facet Function: The universal entry point of a kind contract. Used for rendering, computation, verification, etc.
+ * Facet Selector: A unique identifier (e.g. function signature) used to dispatch calls to the facet function.
+ * Facet Image: An image or asset dynamically generated by the kind contract from object elements like matter or gene.

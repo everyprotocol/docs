@@ -29,15 +29,8 @@
             ]
           },
           {
-            "group": "Essentials",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
-            ]
+            "group": "Advanced",
+            "pages": ["concepts/projection-layer", "concepts/ovm", "concepts/pocc"]
           }
         ]
       },
@@ -45,17 +38,20 @@
         "tab": "Tutorials",
         "groups": [
           {
-            "group": "API Documentation",
-            "pages": ["api-reference/introduction"]
+            "group": "Creators",
+            "pages": [
+              "tutorials/get-started",
+              "tutorials/register-matters",
+              "tutorials/register-values",
+              "tutorials/register-uniques",
+              "tutorials/register-kinds",
+              "tutorials/register-sets",
+              "tutorials/register-relations"
+            ]
           },
           {
-            "group": "Endpoint Examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
+            "group": "Developers",
+            "pages": ["tutorials/writing-kind-contracts", "tutorials/writing-set-contracts"]
           }
         ]
       },
@@ -63,16 +59,14 @@
         "tab": "Contracts",
         "groups": [
           {
-            "group": "API Documentation",
-            "pages": ["api-reference/introduction"]
-          },
-          {
-            "group": "Endpoint Examples",
+            "group": "Contracts",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "contracts/overview",
+              "contracts/element-registry",
+              "contracts/kind-registry",
+              "contracts/set-registry",
+              "contracts/omni-registry",
+              "contracts/deployment"
             ]
           }
         ]

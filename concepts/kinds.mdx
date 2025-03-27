@@ -2,17 +2,16 @@ A **kind** is an meta object that defines (of a group of objects)the composition
 
 ## Metadata
 
-// ai! add a short text
+Kind metadata contains essential information about the object's type and versioning. It follows a standardized structure:
 
-// ai! use table with a header: fields, value, description
-```ts
-meta.flags    = 0;
-meta.rev      = 1;
-meta.kindRev  = latestKindOfKind();
-meta.setRev   = latestSetOfKind();
-meta.kind     = ID_KIND_OF_KIND;
-meta.set      = ID_SET_OF_KIND;
-```
+| Field     | Value                  | Description                          |
+|-----------|------------------------|--------------------------------------|
+| flags     | 0                      | Status flags (reserved for future use) |
+| rev       | 1                      | Current revision number              |
+| kindRev   | latestKindOfKind()      | Revision of the Kind of Kind         |
+| setRev    | latestSetOfKind()       | Revision of the Set of Kind          |
+| kind      | ID_KIND_OF_KIND        | Kind ID (always points to Kind of Kind) |
+| set       | ID_SET_OF_KIND         | Set ID (always points to Set of Kind) |
 
 ## Elements
 

@@ -1,0 +1,95 @@
+A **kind** is an meta object that defines (of a group of objects)the composition, appearance and interactions with other objects.
+
+## Metadata
+
+// ai! add a short text
+
+// ai! use table with a header: fields, value, description
+```ts
+meta.flags    = 0;
+meta.rev      = 1;
+meta.kindRev  = latestKindOfKind();
+meta.setRev   = latestSetOfKind();
+meta.kind     = ID_KIND_OF_KIND;
+meta.set      = ID_SET_OF_KIND;
+```
+
+## Elements
+
+Kinds are structured using elements, just like other objects — but the element slots have special meaning. The element layout is defined by the **Kind of Kind**.
+
+| Index | Name   | Mutable | Description                                                  |
+|-------|--------|---------|--------------------------------------------------------------|
+| 0     | shape  | No      | Declares element types for objects of this kind              |
+| 1     | code   | Yes     | Material hash of the kind contract (Wasm code)               |
+| 2     | gene   | Yes     | Shared data/config for all objects of this kind              |
+| 3     | rels0  | Yes     | Supported incoming relation IDs (up to 8)                    |
+| 4     | rels1  | Yes     | Supported outgoing relation IDs (up to 8)                    |
+
+### code
+
+The `code` element contains the material hash of the kind contract. This is Wasm code executed by the observer chain (Every Network) through the OVM. It defines dynamic behaviors like rendering, transformations, or computed responses.
+
+### shape
+
+The `shape` element defines the element layout for objects of this kind — i.e., what types of elements they must include.
+
+Encoded as a `uint8[]` of length 0–16. Supported values:
+
+| Value | Type               |
+|-------|--------------------|
+| 1     | OBJECT             |
+| 2     | INFORMATION        |
+| 3     | VALUE              |
+| 4     | ARTIFACT           |
+| 5     | MATERIAL_GENERAL   |
+| 6     | MATERIAL_JSON      |
+| 7     | MATERIAL_PTABLE    |
+| 8     | MATERIAL_MKTREE    |
+| 9     | MATERIAL_IMAGE     |
+
+### gene
+
+The `gene` is a shared configuration element — often JSON — that applies to all objects of this kind. It may include:
+
+- `name`
+- `description`
+- `image`
+- Additional kind-specific fields
+
+### relations
+
+Kinds can express interaction rules via two relation fields:
+
+- `rels0` — Supported incoming relation IDs
+- `rels1` — Supported outgoing relation IDs
+
+Each field is a 64-byte sequence containing up to 8 `uint64` relation IDs (big-endian). Remaining slots are zero-padded.
+
+## Usage
+
+Kinds are essential throughout Every Protocol:
+
+- **In sets** — Each object minted from a set is assigned a kind
+- **In relations** — Relation rules are defined between kinds
+- **In runtime** — The Every Network executes kind logic to interpret and render objects
+
+## Kind Contract
+
+The kind contract is Wasm code that defines programmable behavior for a kind. It is referenced in the `code` element and executed through the observer network (Every Network) using the OVM.
+
+### Facet Function
+
+A kind contract exposes a **facet function** — the universal entry point for logic such as rendering, computing, or verifying object assets.
+
+### Selector
+
+The **selector** is a unique identifier (usually a function signature) used to dispatch calls to the facet function.
+
+### Image
+
+Kinds can define how an object’s image or asset is computed based on its content (e.g., matter, gene, or other elements). This image is generated dynamically by the kind contract during execution.
+
+---
+
+Kinds provide the foundation for object semantics and computation in Every Protocol. By separating type definitions into programmable, composable kind objects, Every Protocol enables a fully modular, extensible system for onchain creation and collaboration.

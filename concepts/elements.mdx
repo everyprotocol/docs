@@ -9,7 +9,9 @@ Elements fall into four categories:
 
 All elements are encoded as 32-byte values when stored in token contracts.
 
-## Matter
+## Element Types
+
+### Matter
 
 Matter elements represent cryptographically committed content stored on the Every Network. Each object that includes a matter element references it by its hash.
 
@@ -21,10 +23,16 @@ Matter elements represent cryptographically committed content stored on the Ever
 | `mime`     | `string31`  | MIME type (31-byte, zero-padded)       |
 | `content`  | `bytes`     | The actual media or content            |
 
+**Forms:**
+
+todo: list supported forms in a table
+
 **Hashing formula:**
 Only the hash is stored in the token contract. The actual content is stored on the Every Network and is loaded and processed by kind contracts to compute the object’s assets.
 
-## Value
+
+
+### Value
 
 A value element represents an amount of fungible tokens wrapped by the object. The token must be registered in the **Element Registry** and referenced by its token index. The **set contract** is responsible for ensuring that the object is backed by the correct token balance.
 
@@ -38,7 +46,7 @@ A value element represents an amount of fungible tokens wrapped by the object. T
 
 **Note:** This differs from many token standards that use `uint256` for balances. However, `uint128` is sufficient for almost all practical use cases.
 
-## Unique
+### Unique
 
 Unique elements represent non-fungible tokens wrapped by the object. Like value elements, they refer to a registered NFT contract and must be backed by the set contract.
 
@@ -50,12 +58,12 @@ Unique elements represent non-fungible tokens wrapped by the object. Like value 
 | `id`      | `uint64`  | Token ID of the NFT                          |
 | `amount`  | `uint128` | Quantity (must be `1` for ERC721-style NFTs) |
 
-## Info
+### Info
 
 Info elements are arbitrary 32-byte data fields stored directly on the object.
 
 
-## How are elements used
+## Element Registry
 
 todo
 

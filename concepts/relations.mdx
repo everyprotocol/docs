@@ -1,26 +1,38 @@
-A relation defines the possible connections between an object and other objects in the Previous Network.
+A relation defines possible interactions between different kinds of objects. objects supports all the interactions defined by their kinds by default, exceptly ristricted by specially.
 
-If an object \( x \) is connected to an object \( y \) in relation \( R \), we say \( x \) is \( R \)-related to \( y \). \( x \) is called the departure object, and \( y \) is called the destination object.
+A relation is also an object.
 
-## Operations
+## Relation Object
 
-### Relate
+### Metadata
 
-Users can call `relate(uint256 dest, uint256 dep, uint64 rel)` to connect a departure (dep) object to a destination (dest) object.
+The metadata of a realtion object contains essential information about its type and versioning.
 
-### Unrelate
+| Field     | Description                              |
+|-----------|------------------------------------------|
+| `traits`   | Flags, 0 for now (reserved for future use)   |
+| `rev`     | Revision number, starting with 0, increased after     |
+| `krev`    | Revision of the Kind of Set              |
+| `srev`    | Revision of the Set of Set               |
+| `kind`    | The id of the kind object of this relation object |
+| `set`     | The id of the set object of this relation object |
 
-Conversely, `unrelate(uint256 dest, uint256 dep, uint64 rel)` can be called to disconnect them.
 
-## Creation
+### Elements
 
-Relations are registered at the Relation Registry. A relation itself is also an object and consists of two to nine elements, with the first element being `possession` and the remaining elements being `adj_spec0`, `adj_spec1`, ..., `adj_spec7`.
+| Index | Element   | Mutable | Description                                              |
+|-------|-----------|---------|----------------------------------------------------------|
+| `0`   | `data`    | Yes     | Shared data for all objects minted from this set         |
+| `1`   | `code`    | Yes     | Address of the relation contract                         |
+| `2`   | `poss`    | No      | Address of the relation contract                         |
+| `3`   | `adjs[0]` | Yes     | Shared data for all objects minted from this set         |
+| `4`   | `adjs[1]` | Yes     | Shared data for all objects minted from this set         |
 
-### Possession
+#### Possession
 
 The `possession` element defines the processing of the ownership of the departure objects when they are connected or disconnected from destination objects.
 
-### Adjacency Specs
+#### Adjacency
 
 Each `adj_spec_n` element is composed of two tuples: `(dep_kind, min, max)`, `(dep_kind, min, max)`.
 
@@ -39,3 +51,14 @@ The `(dep_kind, min, max)` tuples must be in increasing order. If a wildcard adj
 `min` and `max` can be any `uint32` integer in the range [0, \(2^{32} - 1\)], as long as `max >= min`.
 
 If `max` equals \(2^{32} - 1\), it means unlimited.
+
+
+## Omni Registry
+
+Set objects support the following operations:
+
+| Operation          | Description                                              |
+|--------------------|----------------------------------------------------------|
+| `register_relation`| Registers a new set into the registry.                   |
+| `update_relation`  | Updates the mutable elements of an existing set.         |
+| `upgrade_relation` | Applies a new revision of kind or set to the set object. |

@@ -30,7 +30,7 @@
           },
           {
             "group": "Advanced",
-            "pages": ["concepts/projection-layer", "concepts/ovm", "concepts/pocc"]
+            "pages": ["concepts/pocc", "concepts/projection-layer", "concepts/ovm"]
           }
         ]
       },
@@ -46,7 +46,9 @@
               "tutorials/register-uniques",
               "tutorials/register-kinds",
               "tutorials/register-sets",
-              "tutorials/register-relations"
+              "tutorials/register-relations",
+              "tutorials/relate-objects",
+              "tutorials/mint-objects"
             ]
           },
           {
@@ -80,8 +82,8 @@
               "network/overview",
               "network/accounts",
               "network/transactions",
-              "network/chain-state",
-              "network/kind-contracts",
+              "network/state",
+              "network/contracts",
               "network/ovm",
               "network/tokenomics",
               "network/nodes",

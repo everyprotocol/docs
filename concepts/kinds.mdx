@@ -1,35 +1,36 @@
-A **Kind** is a meta-object that defines the **structure, appearance, and interactions** of a group of objects. It serves as the blueprint — determining what elements an object has, how its assets are computed, and how it interacts with other objects.
+A Kind is a meta-object that defines the structure, appearance, and interactions of a type of objects.
 
-## Metadata
+## Kind Object
+### Metadata
 
-The metadata of a kind contains essential information about its type and versioning.
+The metadata of a kind contains essential information about its type and versioning. Every kind is minted from the **Set of Kinds**, with a kind of the **Kind of Kind**.
 
-| Field     | Value                   | Description                              |
-|-----------|-------------------------|------------------------------------------|
-| `flags`   | `0`                     | Status flags (reserved for future use)   |
-| `rev`     | `1`                     | Current revision number                  |
-| `kindRev` | `latestKindOfKind()`    | Revision of the Kind of Kind             |
-| `setRev`  | `latestSetOfKind()`     | Revision of the Set of Kind              |
-| `kind`    | `ID_KIND_OF_KIND`       | Kind ID (always points to Kind of Kind)  |
-| `set`     | `ID_SET_OF_KIND`        | Set ID (always points to Set of Kind)    |
+| Field     | Value                        | Description                                         |
+|-----------|------------------------------|-----------------------------------------------------|
+| `traits`  | `0`                          | Reserved flags                                      |
+| `rev`     | `1`                          | Current revision number (initially set to `1`)      |
+| `krev`    | `kindOfKind.metadata.rev`    | Revision of the Kind of Kind                        |
+| `srev`    | `setOfKind.metadata.rev`     | Revision of the Set of Kind                         |
+| `kind`    | `kindOfKind.id`              | ID of the Kind of Kind                              |
+| `set`     | `setOfKind.id`               | ID of the Set of Kind                               |
 
-## Elements
+### Elements
 
-Each kind has **6 elements**. These elements are defined by its own kind — the **Kind of Kind** — and serve as building blocks for both definition and execution.
+Each kind has **6 elements**, defined by the **Kind of Kind**. These elements serve as the core structure for both object typing and asset computation.
 
-| Index | Element   | Type   | Mutable | Description                                                 |
-|-------|-----------|--------|---------|-------------------------------------------------------------|
-| `0`   | `shape`   | Info   | No      | Declares element types for objects of this kind             |
-| `1`   | `code`    | Matter | Yes     | Hash of the kind contract                                   |
-| `2`   | `bundle`  | Matter | Yes     | Hash of a bundle, containing committed matters and infos    |
-| `3`   | `rels0`   | Info   | Yes     | Supported relations (part 1)                                |
-| `4`   | `rels1`   | Info   | Yes     | Supported relations (part 2)                                |
+| Index | Element   | Type   | Mutable | Description                                               |
+|-------|-----------|--------|---------|-----------------------------------------------------------|
+| `0`   | `data`    | Matter | Yes     | Hash of a bundle with committed matters and infos         |
+| `1`   | `code`    | Matter | Yes     | Hash of the kind contract                                 |
+| `2`   | `skel`    | Info   | No      | Declares the element types for objects of this kind       |
+| `3`   | `rels[0]` | Info   | Yes     | Supported relations (part 1)                              |
+| `4`   | `rels[1]` | Info   | Yes     | Supported relations (part 2)                              |
 
 ## Kind Contract
 
-A **Kind Contract** is a `Matter` in code form that defines how an object's assets are derived from its elements. It provides programmable logic for rendering, verification, or computation, enabling dynamic and expressive objects.
+A **Kind Contract** is a `Matter` written in code form. It defines how an object’s assets are computed from its elements — enabling programmable logic for rendering, validation, or transformation.
 
-Kind contracts can currently be written in **AssemblyScript**, compiled to WebAssembly using `kind-as`. A Rust toolkit is planned but not yet available.
+Kind contracts are currently written in **AssemblyScript**, compiled to WebAssembly using `kind-as`. A Rust-based compiler is planned for future support.
 
 ```ts
 @kind
@@ -42,15 +43,40 @@ class Hat {
   }
 
   function picture(): Image {
-    // compute main image
+    // image with background
   }
 
   function figure(): Image {
-    // compute figure
+    // image without background
   }
 }
 ```
 
- * Facet Function: The universal entry point of a kind contract. Used for rendering, computation, verification, etc.
- * Facet Selector: A unique identifier (e.g. function signature) used to dispatch calls to the facet function.
- * Facet Image: An image or asset dynamically generated by the kind contract from object elements like matter or gene.
+### Elements
+
+The fields of the contract class define the **elements** of the object. These can be accessed during kind contract execution:
+
+```ts
+design: MatterImage;
+background: MatterImage;
+```
+
+### Facets
+
+The methods exposed by the kind contract are called **facet functions**. Each facet function defines how a specific object asset is computed:
+
+```ts
+function picture(): Image {
+  // image with background
+}
+```
+
+Each output is called a **facet image**, and it can be accessed using a **facet selector** — a unique identifier used to dispatch to the correct function.
+
+## Kind Registry
+
+| Operation      | Description                                                   |
+|----------------|---------------------------------------------------------------|
+| `register_kind`| Registers a new kind into the registry.                       |
+| `update_kind`  | Updates the mutable elements of an existing kind.             |
+| `upgrade_kind` | Applies a new revision of kind or set to the kind object.     |

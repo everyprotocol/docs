@@ -100,7 +100,14 @@
         "groups": [
           {
             "group": "Reference",
-            "pages": ["reference/tools/every-cli", "reference/tools/kasc", "reference/tools/kind-as"]
+            "pages": [
+              "reference/tools/every-cli",
+              "reference/tools/kasc",
+              "reference/tools/kind-as",
+              "reference/ovm",
+              "reference/everything-theory",
+              "reference/grossary"
+            ]
           },
 
           {

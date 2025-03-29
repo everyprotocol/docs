@@ -100,12 +100,12 @@
         "groups": [
           {
             "group": "Reference",
-            "pages": ["reference/tools/every-cli", "reference/tools/kind-as"]
+            "pages": ["reference/tools/every-cli", "reference/tools/kasc", "reference/tools/kind-as"]
           },
 
           {
             "group": "Resources",
-            "pages": ["reference/resources/bun", "reference/resources/foundry"]
+            "pages": ["reference/resources/bun", "reference/resources/foundry", "reference/resources/assemblyscript"]
           }
         ]
       }

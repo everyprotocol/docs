@@ -61,15 +61,18 @@
         "tab": "Contracts",
         "groups": [
           {
-            "group": "Contracts",
+            "group": "V1 Core",
             "pages": [
-              "contracts/overview",
-              "contracts/element-registry",
-              "contracts/kind-registry",
-              "contracts/set-registry",
-              "contracts/omni-registry",
-              "contracts/deployment"
+              "contracts/v1-core/element-registry",
+              "contracts/v1-core/kind-registry",
+              "contracts/v1-core/set-registry",
+              "contracts/v1-core/omni-registry",
+              "contracts/v1-core/deployment"
             ]
+          },
+          {
+            "group": "V1 Periphery",
+            "pages": ["contracts/v1-periphery/set"]
           }
         ]
       },
@@ -96,22 +99,10 @@
         "tab": "Reference",
         "groups": [
           {
-            "group": "Tools",
+            "group": "Reference",
             "pages": ["reference/tools/every-cli", "reference/tools/kind-as"]
           },
-          {
-            "group": "V1 Core",
-            "pages": [
-              "reference/v1-core/element-registry",
-              "reference/v1-core/kind-registry",
-              "reference/v1-core/set-registry",
-              "reference/v1-core/omni-registry"
-            ]
-          },
-          {
-            "group": "V1 Periphery",
-            "pages": ["reference/v1-periphery/set"]
-          },
+
           {
             "group": "Resources",
             "pages": ["reference/resources/bun", "reference/resources/foundry"]

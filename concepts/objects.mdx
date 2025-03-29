@@ -1,16 +1,15 @@
-todo: what is an object in short.
+Object Token is a novel token standard introduced by Every Protocol — often referred to simply as an object.
 
-The OpenZeppelin documentation[^note] provides a clear explanation of the distinction between tokens and token contracts:
-
-> *Token contracts are smart contracts that manage token balances and operations, while tokens themselves are the digital assets represented by those balances.*
-
-[^note]: [OpenZeppelin Docs – Tokens](https://docs.openzeppelin.com/contracts/4.x/tokens)
-
-Compared to existing standards, **object tokens** store more structured and extensible data within token contracts. Additionally, data related to **interoperations** — often involving multiple token contracts — is maintained in a shared onchain contract called the **Omni Registry**.
+It is designed to be structured, composable, and interactive, enabling tokens that can evolve, relate, and co-create across creators and chains.
 
 ## Storage
 
-Different token standards store different kinds of data in their contracts. Object tokens introduce a richer structure at the contract level and delegate shared operations — like positioning and connections — to the **Omni Registry**.
+The  [OpenZeppelin documentation](https://docs.openzeppelin.com/contracts/4.x/tokens) clearly distinguishes between tokens and token contracts:
+
+>	Token contracts are smart contracts that manage token balances and operations, while tokens themselves are the digital assets represented by those balances.
+
+
+In contrast to existing standards like ERC-721 or ERC-1155, Object Tokens store structured and extensible data directly within token contracts. Beyond local state, properties related to interactions across objects and across contracts are maintained in a shared coordination layer called the Omni Registry.
 
 | Standard    | Token Contract Storage                                                  | Omni Registry Storage         |
 |-------------|-------------------------------------------------------------------------|-------------------------------|
@@ -53,8 +52,10 @@ Object tokens introduce additional operations that support **mutation**, **evolu
 | **move**     | Change an object’s spatial or logical position           | Omni Registry       | `position`                               |
 ## Assets
 
-todo: on object assets
+For traditional non-fungible tokens (NFTs), the associated assets are referenced via a uri. These URIs may point to IPFS, Arweave, or even centralized servers — but the assets themselves are not guaranteed to be verifiable or secure.
 
-## Set Contract
+Object Tokens take a fundamentally different approach.
 
-## Omni Contract
+Instead of pointing to static external files, assets in Every Protocol are dynamically generated using the object’s metadata.rev, kind, set, and an associated Kind Contract. This makes assets not only programmable, but also publicly verifiable.
+
+An object’s assets can be seen as projections of the object from different perspectives, each one computed via a facet function in the kind contract. These computed views are called facet images.

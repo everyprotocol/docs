@@ -1,0 +1,273 @@
+Core interface for element registration and management
+
+
+## Functions
+### registerValue
+
+Registers a new value element
+
+
+```solidity
+function registerValue(TokenStandard std, address addr, bytes32 material) external returns (uint64 id);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`std`|`TokenStandard`|Token standard (e.g., ERC20)|
+|`addr`|`address`|Token contract address|
+|`material`|`bytes32`|Token material hash|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the newly registered value element|
+
+
+### updateValue
+
+Updates an existing value element
+
+
+```solidity
+function updateValue(uint64 id, bytes32 material) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Token ID to update|
+|`material`|`bytes32`|New material hash|
+
+
+### getValue
+
+Gets value element by token ID
+
+
+```solidity
+function getValue(uint64 id) external view returns (ValueRecord memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Token ID to query|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ValueRecord`|Value struct containing token metadata|
+
+
+### getValue
+
+Gets value element by contract address
+
+
+```solidity
+function getValue(address addr) external view returns (ValueRecord memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`addr`|`address`|Contract address to query|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ValueRecord`|Value struct containing token metadata|
+
+
+### registerArtifact
+
+Registers a new artifact element
+
+
+```solidity
+function registerArtifact(TokenStandard std, address addr, bytes32 material, uint64 begin, uint64 end)
+    external
+    returns (uint64 id);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`std`|`TokenStandard`|Token standard (e.g., ERC721, ERC1155)|
+|`addr`|`address`|Token contract address|
+|`material`|`bytes32`|Token material hash|
+|`begin`|`uint64`|Starting token ID|
+|`end`|`uint64`|Ending token ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the newly registered artifact element|
+
+
+### updateArtifact
+
+Updates an existing artifact element
+
+
+```solidity
+function updateArtifact(uint64 id, bytes32 material) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Token ID to update|
+|`material`|`bytes32`|New material hash|
+
+
+### getArtifact
+
+Gets artifact element by token ID
+
+
+```solidity
+function getArtifact(uint64 id) external view returns (ArtifactRecord memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Token ID to query|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ArtifactRecord`|Artifact struct containing token metadata|
+
+
+### getArtifact
+
+Gets artifact element by contract address
+
+
+```solidity
+function getArtifact(address addr) external view returns (ArtifactRecord memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`addr`|`address`|Contract address to query|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ArtifactRecord`|Artifact struct containing token metadata|
+
+
+## Events
+### ValueRegistered
+Emitted when a new value element is registered
+
+
+```solidity
+event ValueRegistered(uint64 id, TokenStandard std, uint8 decimals, address addr, bytes32 material, address admin);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the registered value element|
+|`std`|`TokenStandard`|The token standard|
+|`decimals`|`uint8`|The number of decimals for the token|
+|`addr`|`address`|The token contract address|
+|`material`|`bytes32`|The token material hash|
+|`admin`|`address`|The address of the admin who registered the value|
+
+### ValueUpdated
+Emitted when a value element is updated
+
+
+```solidity
+event ValueUpdated(uint64 id, bytes32 material);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the updated value element|
+|`material`|`bytes32`|The new material hash|
+
+### ValueTransferred
+Emitted when a value element is transferred
+
+
+```solidity
+event ValueTransferred(uint64 id, address from, address to);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the transferred value element|
+|`from`|`address`|The address transferring the value|
+|`to`|`address`|The address receiving the value|
+
+### ArtifactRegistered
+Emitted when a new artifact element is registered
+
+
+```solidity
+event ArtifactRegistered(
+    uint64 id, TokenStandard std, address addr, bytes32 material, uint64 begin, uint64 end, address admin
+);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the registered artifact element|
+|`std`|`TokenStandard`|The token standard|
+|`addr`|`address`|The token contract address|
+|`material`|`bytes32`|The token material hash|
+|`begin`|`uint64`|The starting token ID|
+|`end`|`uint64`|The ending token ID|
+|`admin`|`address`|The address of the admin who registered the artifact|
+
+### ArtifactUpdated
+Emitted when an artifact element is updated
+
+
+```solidity
+event ArtifactUpdated(uint64 id, bytes32 material);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the updated artifact element|
+|`material`|`bytes32`|The new material hash|
+
+### ArtifactTransferred
+Emitted when an artifact element is transferred
+
+
+```solidity
+event ArtifactTransferred(uint64 id, address from, address to);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the transferred artifact element|
+|`from`|`address`|The address transferring the artifact|
+|`to`|`address`|The address receiving the artifact|

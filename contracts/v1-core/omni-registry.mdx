@@ -1,0 +1,254 @@
+**Inherits:**
+[ISpaceRegistry](/src/interfaces/core/ISpaceRegistry.sol/interface.ISpaceRegistry.md), [IRelationRegistry](/src/interfaces/core/IRelationRegistry.sol/interface.IRelationRegistry.md)
+
+OOPS (Object Operating and Positioning System) is the contract responsible for handling the registration and management of relations, transforms, and spaces, while also overseeing object interactions and positioning within the protocol.
+
+
+## Functions
+### relate
+
+Relates a dependent object to a destination object
+
+
+```solidity
+function relate(uint64 rel, uint256 dep, uint128 dest) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rel`|`uint64`||
+|`dep`|`uint256`|The ID of the dependent object|
+|`dest`|`uint128`|The ID of the destination object|
+
+
+### relate
+
+Relates multiple dependent objects to a destination object
+
+
+```solidity
+function relate(uint64 rel, uint256[] memory deps, uint128 dest) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rel`|`uint64`||
+|`deps`|`uint256[]`|Array of dependent object IDs|
+|`dest`|`uint128`|The ID of the destination object|
+
+
+### unrelate
+
+Unrelates a dependent object from a destination object
+
+
+```solidity
+function unrelate(uint64 rel, uint256 dep, uint128 dest) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rel`|`uint64`||
+|`dep`|`uint256`|The ID of the dependent object|
+|`dest`|`uint128`|The ID of the destination object|
+
+
+### unrelate
+
+Unrelates multiple dependent objects from a destination object
+
+
+```solidity
+function unrelate(uint64 rel, uint256[] memory deps, uint256 dest) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rel`|`uint64`||
+|`deps`|`uint256[]`|Array of dependent object IDs|
+|`dest`|`uint256`|The ID of the destination object|
+
+
+### move
+
+Moves an object to a new position
+
+
+```solidity
+function move(uint256 obj, uint128 pos) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`obj`|`uint256`|The ID of the object|
+|`pos`|`uint128`|The new position of the object|
+
+
+### move
+
+Moves multiple objects to a new position
+
+
+```solidity
+function move(uint256[] memory objs, uint128 pos) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`objs`|`uint256[]`|Array of object IDs|
+|`pos`|`uint128`|The new position of the objects|
+
+
+### kindRegistry
+
+
+```solidity
+function kindRegistry() external view returns (address);
+```
+
+### setRegistry
+
+
+```solidity
+function setRegistry() external view returns (address);
+```
+
+### elementRegistry
+
+
+```solidity
+function elementRegistry() external view returns (address);
+```
+
+### universe
+
+
+```solidity
+function universe() external view returns (uint64);
+```
+
+### kindRevAt
+
+
+```solidity
+function kindRevAt(uint64 kind, uint32 rev) external view returns (uint32);
+```
+
+### setRevAt
+
+
+```solidity
+function setRevAt(uint64 set, uint32 rev) external view returns (uint32);
+```
+
+### objectAssetAt
+
+
+```solidity
+function objectAssetAt(uint64 set, uint64 id, uint32 sel, uint32 rev) external view returns (string memory);
+```
+
+## Events
+### Related
+Emitted when an object is related to another object
+
+
+```solidity
+event Related(uint64 rel, uint256 dep, uint128 dest, uint32 rev);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rel`|`uint64`||
+|`dep`|`uint256`|The ID of the dependent object|
+|`dest`|`uint128`|The ID of the destination object|
+|`rev`|`uint32`|The revision number of the relation|
+
+### Related
+Emitted when multiple objects are related to a destination object
+
+
+```solidity
+event Related(uint64 rel, uint256[] deps, uint128 dest, uint32 rev);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rel`|`uint64`||
+|`deps`|`uint256[]`|Array of dependent object IDs|
+|`dest`|`uint128`|The ID of the destination object|
+|`rev`|`uint32`|The revision number of the relation|
+
+### Unrelated
+Emitted when an object is unrelated (disconnected) from another object
+
+
+```solidity
+event Unrelated(uint64 rel, uint256 dep, uint128 dest, uint32 rev);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rel`|`uint64`||
+|`dep`|`uint256`|The ID of the dependent object|
+|`dest`|`uint128`|The ID of the destination object|
+|`rev`|`uint32`|The revision number of the relation|
+
+### Unrelated
+Emitted when multiple objects are unrelated from a destination object
+
+
+```solidity
+event Unrelated(uint64 rel, uint256[] deps, uint128 dest, uint32 rev);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rel`|`uint64`||
+|`deps`|`uint256[]`|Array of dependent object IDs|
+|`dest`|`uint128`|The ID of the destination object|
+|`rev`|`uint32`|The revision number of the relation|
+
+### Moved
+Emitted when the position of an object is changed
+
+
+```solidity
+event Moved(uint256 obj, uint128 pos);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`obj`|`uint256`|The ID of the object being moved|
+|`pos`|`uint128`|The new position of the object|
+
+### Moved
+Emitted when multiple objects are moved to a new position
+
+
+```solidity
+event Moved(uint256[] objs, uint128 pos);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`objs`|`uint256[]`|Array of object IDs being moved|
+|`pos`|`uint128`|The new position of the objects|

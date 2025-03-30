@@ -1,0 +1,396 @@
+Primary interface for kind registration and management
+
+
+## Functions
+### register
+
+Registers a new kind with the specified parameters
+
+
+```solidity
+function register(ElementType[] memory shape, bytes32 code, bytes32 data, uint64[] memory rels)
+    external
+    returns (uint64);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`shape`|`ElementType[]`|Specification of the elements that define the object's state|
+|`code`|`bytes32`|The material hash of the kind's code|
+|`data`|`bytes32`|The material hash of the kind's data|
+|`rels`|`uint64[]`|List of relations supported by this kind|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint64`|The ID of the newly registered kind|
+
+
+### update
+
+Updates the code and data of an existing kind
+
+
+```solidity
+function update(uint64 id, bytes32 code, bytes32 data) external returns (ObjectMeta memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the kind to be updated|
+|`code`|`bytes32`|The new material hash representing the kind's code (zero = no change)|
+|`data`|`bytes32`|The new material hash representing the kind's data (zero = no change)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ObjectMeta`|The updated metadata for the kind|
+
+
+### update
+
+Updates the code, data, and relations of an existing kind
+
+
+```solidity
+function update(uint64 id, bytes32 code, bytes32 gene, uint64[] memory rels) external returns (ObjectMeta memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the kind to update|
+|`code`|`bytes32`|The new material hash representing the kind's code (zero = no change)|
+|`gene`|`bytes32`|The new material hash representing the kind's data (zero = no change)|
+|`rels`|`uint64[]`|The updated list of relations for the kind|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ObjectMeta`|The updated metadata of the kind|
+
+
+### upgrade
+
+Upgrades object to newer kind/set revisions
+
+
+```solidity
+function upgrade(uint64 id, uint32 kindRev, uint32 setRev) external returns (ObjectMeta memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`kindRev`|`uint32`|New kind revision (0 = no upgrade)|
+|`setRev`|`uint32`|New set revision (0 = no upgrade)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ObjectMeta`|Updated metadata after upgrade|
+
+
+### touch
+
+Bumps object revision without state changes
+
+
+```solidity
+function touch(uint64 id) external returns (ObjectMeta memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ObjectMeta`|Updated metadata after touch|
+
+
+### transfer
+
+Transfers object ownership
+
+
+```solidity
+function transfer(uint64 id, address to) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`to`|`address`|New owner's address|
+
+
+### ownerOf
+
+Gets current owner of an object
+
+
+```solidity
+function ownerOf(uint64 id) external view returns (address);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`address`|Owner's address|
+
+
+### shapeOf
+
+Retrieves the shape of a kind
+
+
+```solidity
+function shapeOf(uint64 id) external view returns (ElementType[] memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the kind|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ElementType[]`|The state specification of the kind|
+
+
+### codeAt
+
+Retrieves the code hash of a kind at a given revision
+
+
+```solidity
+function codeAt(uint64 id, uint32 rev) external view returns (bytes32);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the kind|
+|`rev`|`uint32`|The specific revision number (zero = latest revision)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bytes32`|The code hash of the kind|
+
+
+### relsAt
+
+Retrieves the relations supported by a kind at a given revision
+
+
+```solidity
+function relsAt(uint64 id, uint32 rev) external view returns (uint64[] memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the kind|
+|`rev`|`uint32`|The specific revision number (zero = latest revision)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint64[]`|The supported relations|
+
+
+### metaAt
+
+Gets object metadata at specific revision
+
+
+```solidity
+function metaAt(uint64 id, uint32 rev) external view returns (ObjectMeta memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`rev`|`uint32`|Revision number (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ObjectMeta`|Object metadata|
+
+
+### elemsAt
+
+Gets object elements at specific revision
+
+
+```solidity
+function elemsAt(uint64 id, uint32 rev) external view returns (bytes32[] memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`rev`|`uint32`|Revision number (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bytes32[]`|Array of elements|
+
+
+### revAt
+
+Validates revision and returns revision number
+
+
+```solidity
+function revAt(uint64 id, uint32 rev) external view returns (uint32);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`rev`|`uint32`|Revision number to check (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint32`|Revision number (0 if invalid)|
+
+
+### check
+
+Checks whether a list of kind IDs exist
+
+
+```solidity
+function check(uint64[] memory ids) external view returns (bool);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`ids`|`uint64[]`|An array of kind IDs to validate|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bool`|A boolean indicating whether all provided IDs exist|
+
+
+## Events
+### KindRegistered
+Emitted when a new kind is registered
+
+
+```solidity
+event KindRegistered(
+    uint64 id, ObjectMeta meta, ElementType[] shape, bytes32 code, bytes32 data, uint64[] rels, address owner
+);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the newly registered kind|
+|`meta`|`ObjectMeta`|Metadata of the registered kind|
+|`shape`|`ElementType[]`|The element specification of objects belonging to this kind|
+|`code`|`bytes32`|The material hash of the kind's code|
+|`data`|`bytes32`|The material hash of the kind's data|
+|`rels`|`uint64[]`|List of relations supported by this kind|
+|`owner`|`address`|The address that owns the registered kind|
+
+### KindUpdated
+Emitted when a kind is updated
+
+
+```solidity
+event KindUpdated(uint64 id, ObjectMeta meta, uint64[] rels, bytes32 code, bytes32 data);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the updated kind|
+|`meta`|`ObjectMeta`|Updated metadata of the kind|
+|`rels`|`uint64[]`|Updated list of relations associated with the kind|
+|`code`|`bytes32`|Updated material hash of the kind's code|
+|`data`|`bytes32`|Updated material hash of the kind's data|
+
+### KindUpgraded
+Emitted when a kind is upgraded to a new revision
+
+
+```solidity
+event KindUpgraded(uint64 id, ObjectMeta meta);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the upgraded kind|
+|`meta`|`ObjectMeta`|Updated metadata of the upgraded kind|
+
+### KindTouched
+Emitted when a kind's revision is bumped without state change
+
+
+```solidity
+event KindTouched(uint64 id, ObjectMeta meta);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the kind|
+|`meta`|`ObjectMeta`|Metadata of the touched kind|
+
+### KindTransferred
+Emitted when ownership of a kind is transferred
+
+
+```solidity
+event KindTransferred(uint64 id, address from, address to);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the kind being transferred|
+|`from`|`address`|The current owner of the kind|
+|`to`|`address`|The new owner of the kind|

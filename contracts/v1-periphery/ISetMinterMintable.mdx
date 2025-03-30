@@ -1,0 +1,44 @@
+
+## Functions
+### addMintPolicy
+
+
+```solidity
+function addMintPolicy(MintPolicy memory policy) external returns (uint32);
+```
+
+### updateMintPolicy
+
+
+```solidity
+function updateMintPolicy(uint32 index, MintPolicy memory policy) external;
+```
+
+### disableMintPolicy
+
+
+```solidity
+function disableMintPolicy(uint32 index) external;
+```
+
+### enableMintPolicy
+
+
+```solidity
+function enableMintPolicy(uint32 index) external;
+```
+
+### onObjectMint
+
+
+```solidity
+function onObjectMint(uint64 id, address operator, address recipient, bytes calldata data) external;
+```
+
+### minter
+
+
+```solidity
+function minter() external returns (address);
+```
+

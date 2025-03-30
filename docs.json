@@ -63,16 +63,21 @@
           {
             "group": "V1 Core",
             "pages": [
-              "contracts/v1-core/element-registry",
-              "contracts/v1-core/kind-registry",
-              "contracts/v1-core/set-registry",
-              "contracts/v1-core/omni-registry",
+              "contracts/v1-core/ElementRegistry",
+              "contracts/v1-core/KindRegistry",
+              "contracts/v1-core/SetRegistry",
+              "contracts/v1-core/OmniRegistry",
               "contracts/v1-core/deployment"
             ]
           },
           {
             "group": "V1 Periphery",
-            "pages": ["contracts/v1-periphery/set"]
+            "pages": [
+              "contracts/v1-periphery/ISet",
+              "contracts/v1-periphery/ISetCallback",
+              "contracts/v1-periphery/ISetMinterMintable",
+              "contracts/v1-periphery/ISetSelfMintable"
+            ]
           }
         ]
       },

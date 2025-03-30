@@ -1,0 +1,260 @@
+Complete interface combining methods and events for Set contracts
+
+
+## Functions
+### upgrade
+
+Upgrades object to newer kind/set revisions
+
+
+```solidity
+function upgrade(uint64 id, uint32 kindRev, uint32 setRev) external returns (ObjectMeta memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`kindRev`|`uint32`|New kind revision (0 = no upgrade)|
+|`setRev`|`uint32`|New set revision (0 = no upgrade)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ObjectMeta`|Updated metadata after upgrade|
+
+
+### touch
+
+Bumps object revision without state changes
+
+
+```solidity
+function touch(uint64 id) external returns (ObjectMeta memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ObjectMeta`|Updated metadata after touch|
+
+
+### transfer
+
+Transfers object ownership
+
+
+```solidity
+function transfer(uint64 id, address to) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`to`|`address`|New owner's address|
+
+
+### ownerOf
+
+Gets current owner of an object
+
+
+```solidity
+function ownerOf(uint64 id) external view returns (address);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`address`|Owner's address|
+
+
+### metaAt
+
+Gets object metadata at specific revision
+
+
+```solidity
+function metaAt(uint64 id, uint32 rev) external view returns (ObjectMeta memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`rev`|`uint32`|Revision number (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`ObjectMeta`|Object metadata|
+
+
+### elemsAt
+
+Gets object elements at specific revision
+
+
+```solidity
+function elemsAt(uint64 id, uint32 rev) external view returns (bytes32[] memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`rev`|`uint32`|Revision number (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bytes32[]`|Array of elements|
+
+
+### revAt
+
+Validates revision and returns revision number
+
+
+```solidity
+function revAt(uint64 id, uint32 rev) external view returns (uint32);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`rev`|`uint32`|Revision number to check (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint32`|Revision number (0 if invalid)|
+
+
+## Events
+### Created
+Emitted when a new object is created within a set
+
+
+```solidity
+event Created(uint64 id, ObjectMeta meta, bytes32[] elems, address owner);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`meta`|`ObjectMeta`|The metadata of the object|
+|`elems`|`bytes32[]`|The elements of the object|
+|`owner`|`address`|The address of the object's owner|
+
+### Updated
+Emitted when an object is updated
+
+
+```solidity
+event Updated(uint64 id, ObjectMeta meta, bytes32[] elems);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`meta`|`ObjectMeta`|The updated metadata of the object|
+|`elems`|`bytes32[]`|The updated elements of the object|
+
+### Upgraded
+Emitted when an object is upgraded
+
+
+```solidity
+event Upgraded(uint64 id, ObjectMeta meta);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`meta`|`ObjectMeta`|The updated metadata of the object after the upgrade|
+
+### Touched
+Emitted when an object is touched
+
+
+```solidity
+event Touched(uint64 id, ObjectMeta meta);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`meta`|`ObjectMeta`|The metadata of the object|
+
+### Destroyed
+Emitted when an object is destroyed
+
+
+```solidity
+event Destroyed(uint64 id, ObjectMeta meta);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`meta`|`ObjectMeta`|The metadata of the object before destruction|
+
+### Transferred
+Emitted when the ownership of an object is transferred
+
+
+```solidity
+event Transferred(uint64 id, address from, address to);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|The ID of the object|
+|`from`|`address`|The address of the current owner|
+|`to`|`address`|The address of the new owner|
+
+## Structs
+### ObjectMeta
+
+```solidity
+struct ObjectMeta {
+    uint32 flags;
+    uint32 rev;
+    uint32 kindRev;
+    uint32 setRev;
+    uint64 kind;
+    uint64 set;
+}
+```
+

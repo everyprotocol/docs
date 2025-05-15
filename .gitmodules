@@ -1,0 +1,6 @@
+[submodule "repos/every-cli"]
+	path = repos/every-cli
+	url = git@github.com:everyprotocol/cli.git
+[submodule "repos/periphery"]
+	path = repos/periphery
+	url = git@github.com:everyprotocol/periphery.git

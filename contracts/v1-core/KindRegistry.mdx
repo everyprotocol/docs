@@ -1,311 +1,324 @@
-Primary interface for kind registration and management
+Interface for managing and registering object kinds
 
 
 ## Functions
-### register
+### kindRegister
 
-Registers a new kind with the specified parameters
+Registers a new kind
 
 
 ```solidity
-function register(ElementType[] memory shape, bytes32 code, bytes32 data, uint64[] memory rels)
+function kindRegister(bytes32 code, bytes32 data, ElementType[] memory elemSpec, uint64[] memory rels)
     external
-    returns (uint64);
+    returns (uint64 id, Descriptor memory desc);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`shape`|`ElementType[]`|Specification of the elements that define the object's state|
-|`code`|`bytes32`|The material hash of the kind's code|
-|`data`|`bytes32`|The material hash of the kind's data|
-|`rels`|`uint64[]`|List of relations supported by this kind|
+|`code`|`bytes32`|Code hash of the kind|
+|`data`|`bytes32`|Data hash of the kind|
+|`elemSpec`|`ElementType[]`|Element type layout for objects of this kind|
+|`rels`|`uint64[]`|Supported relation IDs|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`uint64`|The ID of the newly registered kind|
+|`id`|`uint64`|New kind ID|
+|`desc`|`Descriptor`|Descriptor after registration|
 
 
-### update
+### kindUpdate
 
-Updates the code and data of an existing kind
+Updates code and/or data of an existing kind
 
 
 ```solidity
-function update(uint64 id, bytes32 code, bytes32 data) external returns (ObjectMeta memory);
+function kindUpdate(uint64 id, bytes32 code, bytes32 data) external returns (Descriptor memory desc);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the kind to be updated|
-|`code`|`bytes32`|The new material hash representing the kind's code (zero = no change)|
-|`data`|`bytes32`|The new material hash representing the kind's data (zero = no change)|
+|`id`|`uint64`|Kind ID|
+|`code`|`bytes32`|New code hash (0 = skip)|
+|`data`|`bytes32`|New data hash (0 = skip)|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`ObjectMeta`|The updated metadata for the kind|
+|`desc`|`Descriptor`|Updated descriptor|
 
 
-### update
+### kindUpdate
 
-Updates the code, data, and relations of an existing kind
+Updates supported relations of an existing kind
 
 
 ```solidity
-function update(uint64 id, bytes32 code, bytes32 gene, uint64[] memory rels) external returns (ObjectMeta memory);
+function kindUpdate(uint64 id, uint64[] memory rels) external returns (Descriptor memory desc);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the kind to update|
-|`code`|`bytes32`|The new material hash representing the kind's code (zero = no change)|
-|`gene`|`bytes32`|The new material hash representing the kind's data (zero = no change)|
-|`rels`|`uint64[]`|The updated list of relations for the kind|
+|`id`|`uint64`|Kind ID|
+|`rels`|`uint64[]`|Updated relation list|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`ObjectMeta`|The updated metadata of the kind|
+|`desc`|`Descriptor`|Updated descriptor|
 
 
-### upgrade
+### kindUpdate
 
-Upgrades object to newer kind/set revisions
+Updates code, data, and relations of an existing kind
 
 
 ```solidity
-function upgrade(uint64 id, uint32 kindRev, uint32 setRev) external returns (ObjectMeta memory);
+function kindUpdate(uint64 id, bytes32 code, bytes32 data, uint64[] memory rels)
+    external
+    returns (Descriptor memory desc);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the object|
-|`kindRev`|`uint32`|New kind revision (0 = no upgrade)|
-|`setRev`|`uint32`|New set revision (0 = no upgrade)|
+|`id`|`uint64`|Kind ID|
+|`code`|`bytes32`|New code hash (0 = skip)|
+|`data`|`bytes32`|New data hash (0 = skip)|
+|`rels`|`uint64[]`|Updated relation list|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`ObjectMeta`|Updated metadata after upgrade|
+|`desc`|`Descriptor`|Updated descriptor|
 
 
-### touch
+### kindUpgrade
 
-Bumps object revision without state changes
+Upgrades kind/set revision of an existing kind
 
 
 ```solidity
-function touch(uint64 id) external returns (ObjectMeta memory);
+function kindUpgrade(uint64 id, uint32 kindRev, uint32 setRev) external returns (Descriptor memory desc);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the object|
+|`id`|`uint64`|Kind ID|
+|`kindRev`|`uint32`|New kind revision (0 = skip)|
+|`setRev`|`uint32`|New set revision (0 = skip)|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`ObjectMeta`|Updated metadata after touch|
+|`desc`|`Descriptor`|Descriptor after upgrade|
 
 
-### transfer
+### kindTouch
 
-Transfers object ownership
+Touches a kind (bumps revision with no content changes)
 
 
 ```solidity
-function transfer(uint64 id, address to) external;
+function kindTouch(uint64 id) external returns (Descriptor memory desc);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the object|
-|`to`|`address`|New owner's address|
-
-
-### ownerOf
-
-Gets current owner of an object
-
-
-```solidity
-function ownerOf(uint64 id) external view returns (address);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`id`|`uint64`|The ID of the object|
+|`id`|`uint64`|Kind ID|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`address`|Owner's address|
+|`desc`|`Descriptor`|Descriptor after touch|
 
 
-### shapeOf
+### kindTransfer
 
-Retrieves the shape of a kind
+Transfers ownership of a kind
 
 
 ```solidity
-function shapeOf(uint64 id) external view returns (ElementType[] memory);
+function kindTransfer(uint64 id, address to) external returns (address from);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the kind|
+|`id`|`uint64`|Kind ID|
+|`to`|`address`|New owner address|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`ElementType[]`|The state specification of the kind|
+|`from`|`address`|Previous owner address|
 
 
-### codeAt
+### kindRevision
 
-Retrieves the code hash of a kind at a given revision
+Resolves and validates a specific revision
 
 
 ```solidity
-function codeAt(uint64 id, uint32 rev) external view returns (bytes32);
+function kindRevision(uint64 id, uint32 rev0) external view returns (uint32 rev);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the kind|
-|`rev`|`uint32`|The specific revision number (zero = latest revision)|
+|`id`|`uint64`|Kind ID|
+|`rev0`|`uint32`|Revision to check (0 = latest)|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`bytes32`|The code hash of the kind|
+|`rev`|`uint32`|Valid revision number (0 if not found)|
 
 
-### relsAt
+### kindDescriptor
 
-Retrieves the relations supported by a kind at a given revision
+Returns the descriptor at a given revision
 
 
 ```solidity
-function relsAt(uint64 id, uint32 rev) external view returns (uint64[] memory);
+function kindDescriptor(uint64 id, uint32 rev0) external view returns (Descriptor memory desc);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the kind|
-|`rev`|`uint32`|The specific revision number (zero = latest revision)|
+|`id`|`uint64`|Kind ID|
+|`rev0`|`uint32`|Revision to query (0 = latest)|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`uint64[]`|The supported relations|
+|`desc`|`Descriptor`|Descriptor at that revision|
 
 
-### metaAt
+### kindSnapshot
 
-Gets object metadata at specific revision
+Returns descriptor and elements at a specific revision
 
 
 ```solidity
-function metaAt(uint64 id, uint32 rev) external view returns (ObjectMeta memory);
+function kindSnapshot(uint64 id, uint32 rev0) external view returns (Descriptor memory desc, bytes32[] memory elems);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the object|
-|`rev`|`uint32`|Revision number (0 = latest)|
+|`id`|`uint64`|Kind ID|
+|`rev0`|`uint32`|Revision to query (0 = latest)|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`ObjectMeta`|Object metadata|
+|`desc`|`Descriptor`|Descriptor at the revision|
+|`elems`|`bytes32[]`|Element hashes of the kind at the revision|
 
 
-### elemsAt
+### kindOwner
 
-Gets object elements at specific revision
+Returns the current owner of a kind
 
 
 ```solidity
-function elemsAt(uint64 id, uint32 rev) external view returns (bytes32[] memory);
+function kindOwner(uint64 id) external view returns (address owner);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the object|
-|`rev`|`uint32`|Revision number (0 = latest)|
+|`id`|`uint64`|Kind ID|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`bytes32[]`|Array of elements|
+|`owner`|`address`|Owner address|
 
 
-### revAt
+### kindSota
 
-Validates revision and returns revision number
+Returns the latest descriptor and current owner of a kind
 
 
 ```solidity
-function revAt(uint64 id, uint32 rev) external view returns (uint32);
+function kindSota(uint64 id) external view returns (Descriptor memory desc, address owner);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the object|
-|`rev`|`uint32`|Revision number to check (0 = latest)|
+|`id`|`uint64`|Kind ID|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`uint32`|Revision number (0 if invalid)|
+|`desc`|`Descriptor`|Latest descriptor|
+|`owner`|`address`|Current owner address|
 
 
-### check
+### kindStatus
 
-Checks whether a list of kind IDs exist
+Checks whether all specified kinds are active (rev > 0)
 
 
 ```solidity
-function check(uint64[] memory ids) external view returns (bool);
+function kindStatus(uint64[] memory ids) external view returns (bool active);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`ids`|`uint64[]`|An array of kind IDs to validate|
+|`ids`|`uint64[]`|List of kind IDs|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`bool`|A boolean indicating whether all provided IDs exist|
+|`active`|`bool`|True if all specified kinds exist and are active|
+
+
+### kindAdmit
+
+Checks whether a kind at a given revision admits a specific relation
+
+
+```solidity
+function kindAdmit(uint64 kind, uint32 rev, uint64 rel) external view returns (bool admit, uint32 relRev);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`kind`|`uint64`|Kind ID|
+|`rev`|`uint32`|Kind revision (0 = latest)|
+|`rel`|`uint64`|Relation ID to check|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`admit`|`bool`|Whether the relation is admitted|
+|`relRev`|`uint32`|Specific relation revision admitted (0 = latest)|
 
 
 ## Events
@@ -315,7 +328,7 @@ Emitted when a new kind is registered
 
 ```solidity
 event KindRegistered(
-    uint64 id, ObjectMeta meta, ElementType[] shape, bytes32 code, bytes32 data, uint64[] rels, address owner
+    uint64 id, Descriptor desc, bytes32 code, bytes32 data, ElementType[] elemSpec, uint64[] rels, address owner
 );
 ```
 
@@ -323,64 +336,64 @@ event KindRegistered(
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the newly registered kind|
-|`meta`|`ObjectMeta`|Metadata of the registered kind|
-|`shape`|`ElementType[]`|The element specification of objects belonging to this kind|
-|`code`|`bytes32`|The material hash of the kind's code|
-|`data`|`bytes32`|The material hash of the kind's data|
-|`rels`|`uint64[]`|List of relations supported by this kind|
-|`owner`|`address`|The address that owns the registered kind|
+|`id`|`uint64`|Kind ID|
+|`desc`|`Descriptor`|Descriptor after registration|
+|`code`|`bytes32`|Code hash associated with the kind|
+|`data`|`bytes32`|Data hash associated with the kind|
+|`elemSpec`|`ElementType[]`|Element type layout for objects of this kind|
+|`rels`|`uint64[]`|Supported relation IDs|
+|`owner`|`address`|Owner address of the kind|
 
 ### KindUpdated
 Emitted when a kind is updated
 
 
 ```solidity
-event KindUpdated(uint64 id, ObjectMeta meta, uint64[] rels, bytes32 code, bytes32 data);
+event KindUpdated(uint64 id, Descriptor desc, bytes32 code, bytes32 data, uint64[] rels);
 ```
 
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the updated kind|
-|`meta`|`ObjectMeta`|Updated metadata of the kind|
-|`rels`|`uint64[]`|Updated list of relations associated with the kind|
-|`code`|`bytes32`|Updated material hash of the kind's code|
-|`data`|`bytes32`|Updated material hash of the kind's data|
+|`id`|`uint64`|Kind ID|
+|`desc`|`Descriptor`|Updated descriptor|
+|`code`|`bytes32`|Updated code hash|
+|`data`|`bytes32`|Updated data hash|
+|`rels`|`uint64[]`|Updated supported relations|
 
 ### KindUpgraded
-Emitted when a kind is upgraded to a new revision
+Emitted when a kind is upgraded
 
 
 ```solidity
-event KindUpgraded(uint64 id, ObjectMeta meta);
+event KindUpgraded(uint64 id, Descriptor desc);
 ```
 
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the upgraded kind|
-|`meta`|`ObjectMeta`|Updated metadata of the upgraded kind|
+|`id`|`uint64`|Kind ID|
+|`desc`|`Descriptor`|Descriptor after upgrade|
 
 ### KindTouched
-Emitted when a kind's revision is bumped without state change
+Emitted when a kind is touched (revision bump only)
 
 
 ```solidity
-event KindTouched(uint64 id, ObjectMeta meta);
+event KindTouched(uint64 id, Descriptor desc);
 ```
 
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the kind|
-|`meta`|`ObjectMeta`|Metadata of the touched kind|
+|`id`|`uint64`|Kind ID|
+|`desc`|`Descriptor`|Descriptor after touch|
 
 ### KindTransferred
-Emitted when ownership of a kind is transferred
+Emitted when kind ownership is transferred
 
 
 ```solidity
@@ -391,7 +404,7 @@ event KindTransferred(uint64 id, address from, address to);
 
 |Name|Type|Description|
 |----|----|-----------|
-|`id`|`uint64`|The ID of the kind being transferred|
-|`from`|`address`|The current owner of the kind|
-|`to`|`address`|The new owner of the kind|
+|`id`|`uint64`|Kind ID|
+|`from`|`address`|Previous owner|
+|`to`|`address`|New owner|
 

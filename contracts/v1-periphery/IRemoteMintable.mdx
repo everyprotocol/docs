@@ -1,0 +1,53 @@
+**Inherits:**
+IERC165
+
+Interface for set contracts that support minting via an external ObjectMinter
+
+
+## Functions
+### onObjectMint
+
+Called by ObjectMinter after payment is collected but before finalizing the mint
+
+*If `id0` is 0, the contract must assign and return a new object ID.
+If `id0` is non-zero, the contract must validate and return the same ID.*
+
+
+```solidity
+function onObjectMint(address operator, address to, uint64 id0, uint256 context, bytes memory data)
+    external
+    returns (bytes4 selector, uint64 id);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`operator`|`address`|Address that initiated the mint (typically msg.sender)|
+|`to`|`address`|Recipient of the newly minted object|
+|`id0`|`uint64`|Requested object ID (0 = assign automatically)|
+|`context`|`uint256`|Packed 256-bit context data (see MintingContext)|
+|`data`|`bytes`|Optional arbitrary payload passed for custom logic|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`selector`|`bytes4`|Must return `onObjectMint.selector` to confirm success|
+|`id`|`uint64`|Finalized object ID to be minted|
+
+
+### objectMinter
+
+Returns the address of the ObjectMinter contract
+
+
+```solidity
+function objectMinter() external view returns (address minter);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`minter`|`address`|The ObjectMinter address|
+
+

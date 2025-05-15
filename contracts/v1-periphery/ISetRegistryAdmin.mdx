@@ -1,0 +1,91 @@
+Interface for privileged set registration and upgrade operations
+
+*All methods operate on the set represented by the calling contract and must be access-controlled*
+
+
+## Functions
+### registerSet
+
+Registers the set represented by the calling contract
+
+
+```solidity
+function registerSet(bytes32 data) external returns (uint64 id, Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`data`|`bytes32`|Content hash (e.g., metadata or schema)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Newly assigned set ID|
+|`desc`|`Descriptor`|Descriptor of the registered set|
+
+
+### updateSet
+
+Updates the content hash for the set represented by the calling contract
+
+
+```solidity
+function updateSet(bytes32 data) external returns (uint64 id, Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`data`|`bytes32`|New content hash|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Set ID|
+|`desc`|`Descriptor`|Updated descriptor|
+
+
+### upgradeSet
+
+Upgrades the kind or set revision of the set represented by the calling contract
+
+*Pass 0 to skip updating either revision*
+
+
+```solidity
+function upgradeSet(uint32 kindRev0, uint32 setRev0) external returns (uint64 id, Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`kindRev0`|`uint32`|New kind revision (0 = no change)|
+|`setRev0`|`uint32`|New set revision (0 = no change)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Set ID|
+|`desc`|`Descriptor`|Descriptor after upgrade|
+
+
+### touchSet
+
+Increments the revision of the set represented by the calling contract
+
+
+```solidity
+function touchSet() external returns (uint64 id, Descriptor memory desc);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Set ID|
+|`desc`|`Descriptor`|Descriptor after revision bump|
+
+

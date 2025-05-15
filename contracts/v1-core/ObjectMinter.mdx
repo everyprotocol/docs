@@ -1,0 +1,289 @@
+Interface for minting objects with configurable policies
+
+
+## Functions
+### mint
+
+Mint an object (public permission)
+
+
+```solidity
+function mint(address to, address set, uint64 id) external payable;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|The recipient address|
+|`set`|`address`|The set address|
+|`id`|`uint64`|The object ID to mint|
+
+
+### mint
+
+Mint an object with additional data
+
+
+```solidity
+function mint(address to, address set, uint64 id, bytes memory data) external payable;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|The recipient address|
+|`set`|`address`|The set address|
+|`id`|`uint64`|The object ID to mint|
+|`data`|`bytes`|Additional mint data|
+
+
+### mint
+
+Mint an object with allowlist proof
+
+
+```solidity
+function mint(address to, address set, uint64 id, bytes memory auth, uint32 policy) external payable;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|The recipient address|
+|`set`|`address`|The set address|
+|`id`|`uint64`|The object ID to mint|
+|`auth`|`bytes`|ABI-encoded authorization data (see IMintAuthArgument)|
+|`policy`|`uint32`|The policy index being used|
+
+
+### mint
+
+Mint an object with allowlist proof and additional data
+
+
+```solidity
+function mint(address to, address set, uint64 id, bytes memory data, bytes memory auth, uint32 policy)
+    external
+    payable;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|The recipient address|
+|`set`|`address`|The set address|
+|`id`|`uint64`|The object ID to mint|
+|`data`|`bytes`|Additional mint data|
+|`auth`|`bytes`|ABI-encoded authorization data (see IMintAuthArgument)|
+|`policy`|`uint32`|The policy index being used|
+
+
+### mintPolicyAdd
+
+Add a new mint policy (callable only by set contracts)
+
+
+```solidity
+function mintPolicyAdd(MintPolicy memory policy) external returns (uint32 index);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`policy`|`MintPolicy`|The policy details to add|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`index`|`uint32`|The assigned policy index|
+
+
+### mintPolicyDisable
+
+Disable a mint policy (callable only by set contracts)
+
+
+```solidity
+function mintPolicyDisable(uint32 index) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`index`|`uint32`|The policy index to disable|
+
+
+### mintPolicyEnable
+
+Enable a mint policy (callable only by set contracts)
+
+
+```solidity
+function mintPolicyEnable(uint32 index) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`index`|`uint32`|The policy index to enable|
+
+
+### mintPolicyCount
+
+Get number of mint policies for a set
+
+
+```solidity
+function mintPolicyCount(address set) external view returns (uint256 count);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`set`|`address`|The set address to query|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`count`|`uint256`|Number of policies|
+
+
+### mintPolicyGet
+
+Get mint policy by index
+
+
+```solidity
+function mintPolicyGet(address set, uint32 index) external view returns (MintPolicy memory policy);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`set`|`address`|The set address|
+|`index`|`uint32`|Policy index|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`policy`|`MintPolicy`|The mint policy details|
+
+
+### mintPolicySearch
+
+Search for applicable mint policy with permission mask
+
+
+```solidity
+function mintPolicySearch(address set, uint64 id, uint8 mask) external view returns (MintPolicy memory policy);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`set`|`address`|The set address|
+|`id`|`uint64`|The object ID to check|
+|`mask`|`uint8`|Bitmask indicating which MintPermissionType values are included. Each bit corresponds to a permission type (e.g., bit 0 = Public, bit 1 = Allowlist, etc.).|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`policy`|`MintPolicy`|The first matching mint policy|
+
+
+### mintPolicySearch
+
+Search for applicable mint policy with offset and permission mask
+
+
+```solidity
+function mintPolicySearch(address set, uint64 id, uint8 mask, uint32 offset)
+    external
+    view
+    returns (MintPolicy memory policy);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`set`|`address`|The set address|
+|`id`|`uint64`|The object ID to check|
+|`mask`|`uint8`|Bitmask indicating which MintPermissionType values are included. Each bit corresponds to a permission type (e.g., bit 0 = Public, bit 1 = Allowlist, etc.).|
+|`offset`|`uint32`|Starting policy index to search from|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`policy`|`MintPolicy`|The first matching mint policy|
+
+
+## Events
+### MintPolicyEnabled
+Emitted when a mint policy is enabled
+
+
+```solidity
+event MintPolicyEnabled(address set, MintPolicy policy);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`set`|`address`|The set address the policy applies to|
+|`policy`|`MintPolicy`|The enabled policy details|
+
+### MintPolicyDisabled
+Emitted when a mint policy is disabled
+
+
+```solidity
+event MintPolicyDisabled(address set, MintPolicy policy);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`set`|`address`|The set address the policy applies to|
+|`policy`|`MintPolicy`|The disabled policy details|
+
+### ObjectMinted
+Emitted when an object is successfully minted
+
+
+```solidity
+event ObjectMinted(
+    address set,
+    uint64 id,
+    address operator,
+    address to,
+    address currency,
+    uint96 payment,
+    address fundsRecipient,
+    uint96 funds,
+    address feeRecipient,
+    uint96 fee
+);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`set`|`address`|The address of the set contract the object is minted from|
+|`id`|`uint64`|The ID of the minted object within the set|
+|`operator`|`address`|The address that initiated the mint (usually msg.sender)|
+|`to`|`address`|The recipient address receiving the minted object|
+|`currency`|`address`|The address of the payment token (native or ERC20)|
+|`payment`|`uint96`|The total payment (includes both fee and funds)|
+|`fundsRecipient`|`address`|The address receiving the creator or project revenue|
+|`funds`|`uint96`|The amount sent to the fundsRecipient|
+|`feeRecipient`|`address`|The address receiving the protocol fee|
+|`fee`|`uint96`|The amount sent to the feeRecipient|
+

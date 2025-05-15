@@ -1,0 +1,28 @@
+```bash
+
+every set register \
+    0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1 \
+    0xda4a000000000000000000000000000000000000000000000000000000000000 \
+    -a bob --foundry
+
+{
+  index: 0,
+  status: 0,
+  perm: 0,
+  limit: 100,
+  tag: 42,
+  recipient: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+  currency: '0x0000000000000000000000000000000000000000',
+  price: '25000000000000000',
+  idStart: 1,
+  idEnd: 10000,
+  saleStart: 1747196739,
+  saleEnd: 2747196739,
+  data: '0x0000000000000000000000000000000000000000000000000000000000000000'
+}
+
+every mintpolicy add \
+    0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1 \
+    "$(cat mp.json5)" -a bob --foundry
+
+```

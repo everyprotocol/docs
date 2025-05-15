@@ -1,0 +1,360 @@
+Interface for registering and managing uniques
+
+
+## Functions
+### uniqueRegister
+
+Registers a new unique token
+
+
+```solidity
+function uniqueRegister(address code, bytes32 data, TokenStandard std, uint8 decimals, string memory symbol)
+    external
+    returns (uint64 id, Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`code`|`address`|Address of the token contract|
+|`data`|`bytes32`|Hash of the associated matter|
+|`std`|`TokenStandard`|Token standard (e.g. ERC721)|
+|`decimals`|`uint8`|Number of decimals|
+|`symbol`|`string`|Display symbol (max 30 characters)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|ID of the new unique|
+|`desc`|`Descriptor`|Descriptor after registration|
+
+
+### uniqueUpdate
+
+Updates the data hash of a unique
+
+
+```solidity
+function uniqueUpdate(uint64 id, bytes32 data) external returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`data`|`bytes32`|New data hash|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Updated descriptor|
+
+
+### uniqueUpdate
+
+Updates the data hash and symbol of a unique
+
+
+```solidity
+function uniqueUpdate(uint64 id, bytes32 data, string memory symbol) external returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`data`|`bytes32`|New data hash|
+|`symbol`|`string`|New display symbol (max 30 characters)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Updated descriptor|
+
+
+### uniqueUpgrade
+
+Upgrades the kind and/or set revision of a unique
+
+
+```solidity
+function uniqueUpgrade(uint64 id, uint32 kindRev, uint32 setRev) external returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`kindRev`|`uint32`|New kind revision (0 = no change)|
+|`setRev`|`uint32`|New set revision (0 = no change)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Descriptor after upgrade|
+
+
+### uniqueTouch
+
+Bumps the revision of a unique with no content change
+
+
+```solidity
+function uniqueTouch(uint64 id) external returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Descriptor after touch|
+
+
+### uniqueTransfer
+
+Transfers ownership of a unique token
+
+
+```solidity
+function uniqueTransfer(uint64 id, address to) external returns (address from);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`to`|`address`|Address of the new owner|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`from`|`address`|Address of the previous owner|
+
+
+### uniqueRevision
+
+Resolves and validates a revision
+
+
+```solidity
+function uniqueRevision(uint64 id, uint32 rev0) external view returns (uint32 rev);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`rev0`|`uint32`|Requested revision (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rev`|`uint32`|Resolved revision (0 = not found)|
+
+
+### uniqueDescriptor
+
+Returns the descriptor at a given revision
+
+
+```solidity
+function uniqueDescriptor(uint64 id, uint32 rev0) external view returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`rev0`|`uint32`|Revision to query (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Descriptor at the specified revision|
+
+
+### uniqueSnapshot
+
+Returns descriptor and elements at a specific revision
+
+
+```solidity
+function uniqueSnapshot(uint64 id, uint32 rev0)
+    external
+    view
+    returns (Descriptor memory desc, bytes32[] memory elems);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`rev0`|`uint32`|Revision to query (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Descriptor at the revision|
+|`elems`|`bytes32[]`|Elements at the revision|
+
+
+### uniqueOwner
+
+Returns the current owner of a unique
+
+
+```solidity
+function uniqueOwner(uint64 id) external view returns (address owner);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|Address of the current owner|
+
+
+### uniqueSota
+
+Returns the latest descriptor and current owner
+
+
+```solidity
+function uniqueSota(uint64 id) external view returns (Descriptor memory desc, address owner);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Latest descriptor|
+|`owner`|`address`|Address of the current owner|
+
+
+### uniqueStatus
+
+Checks whether all given uniques are active (revision > 0)
+
+
+```solidity
+function uniqueStatus(uint64[] memory ids) external view returns (bool active);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`ids`|`uint64[]`|List of unique IDs|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`active`|`bool`|True if all exist and are active|
+
+
+## Events
+### UniqueRegistered
+Emitted when a new unique is registered
+
+
+```solidity
+event UniqueRegistered(uint64 id, Descriptor desc, address code, bytes32 data, TokenSpec spec, address owner);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`desc`|`Descriptor`|Descriptor of the unique|
+|`code`|`address`|Token contract address|
+|`data`|`bytes32`|Hash of the underlying asset (e.g., image, model, metadata)|
+|`spec`|`TokenSpec`|Token specification (standard, decimals, and symbol)|
+|`owner`|`address`|Address of the initial owner|
+
+### UniqueUpdated
+Emitted when a unique is updated
+
+
+```solidity
+event UniqueUpdated(uint64 id, Descriptor desc, bytes32 data, TokenSpec spec);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`desc`|`Descriptor`|Updated descriptor (same ID, new revision)|
+|`data`|`bytes32`|New data hash representing the updated asset|
+|`spec`|`TokenSpec`|Updated or unchanged token specification|
+
+### UniqueUpgraded
+Emitted when a unique is upgraded to a new revision
+
+
+```solidity
+event UniqueUpgraded(uint64 id, Descriptor desc);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`desc`|`Descriptor`|Descriptor after the upgrade (revised kind/set refs)|
+
+### UniqueTouched
+Emitted when a unique is touched (revision bumped with no content change)
+
+
+```solidity
+event UniqueTouched(uint64 id, Descriptor desc);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`desc`|`Descriptor`|Descriptor after touch (updated revision only)|
+
+### UniqueTransferred
+Emitted when ownership of a unique is transferred
+
+
+```solidity
+event UniqueTransferred(uint64 id, address from, address to);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Unique ID|
+|`from`|`address`|Previous owner's address|
+|`to`|`address`|New owner's address|
+

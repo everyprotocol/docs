@@ -61,24 +61,26 @@
         "tab": "Contracts",
         "groups": [
           {
-            "group": "V1 Core",
+            "group": "Core",
             "pages": [
-              "contracts/v1-core/ElementRegistry",
-              "contracts/v1-core/KindRegistry",
               "contracts/v1-core/SetRegistry",
               "contracts/v1-core/OmniRegistry",
-              "contracts/v1-core/deployment"
+              "contracts/v1-core/KindRegistry",
+              "contracts/v1-core/ElementRegistry",
+              "contracts/v1-core/ObjectMinter"
             ]
           },
           {
-            "group": "V1 Periphery",
+            "group": "Periphery",
             "pages": [
               "contracts/v1-periphery/ISet",
-              "contracts/v1-periphery/ISetCallback",
-              "contracts/v1-periphery/ISetMinterMintable",
-              "contracts/v1-periphery/ISetSelfMintable"
+              "contracts/v1-periphery/IInteroperable",
+              "contracts/v1-periphery/IRemoteMintable",
+              "contracts/v1-periphery/ISetRegistryAdmin",
+              "contracts/v1-periphery/IObjectMinterAdmin"
             ]
-          }
+          },
+          { "group": "Deployment", "pages": ["contracts/v1-core/deployment"] }
         ]
       },
       {

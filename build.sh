@@ -3,11 +3,11 @@ set -e
 
 # every-cli
 (cd repos/every-cli; bun install; bunx commander-docgen --entry src/program.ts --out every-cli.md)
-cp repos/every-cli/every-cli.md docs/reference/every-cli.mdx
+mv repos/every-cli/every-cli.md docs/reference/every-cli.mdx
 
 # kind-as
 (cd repos/kind-as; bun install; bunx commander-docgen --entry src/program.ts --out kasc.md)
-cp repos/kind-as/kasc.md docs/reference/kasc.mdx
+mv repos/kind-as/kasc.md docs/reference/kasc.mdx
 
 # # periphery
 repo=repos/periphery

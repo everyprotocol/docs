@@ -108,18 +108,16 @@
           {
             "group": "Reference",
             "pages": [
-              "reference/tools/every-cli",
-              "reference/tools/kasc",
-              "reference/tools/kind-as",
-              "reference/ovm",
-              "reference/everything-theory",
-              "reference/glossary"
+              "reference/every-cli",
+              "reference/kasc",
+              "reference/kind-as",
+              "reference/core",
+              "reference/periphery"
             ]
           },
-
           {
             "group": "Resources",
-            "pages": ["reference/resources/bun", "reference/resources/foundry", "reference/resources/assemblyscript"]
+            "pages": ["reference/resources/foundry", "reference/resources/assemblyscript", "reference/resources/bun"]
           }
         ]
       }

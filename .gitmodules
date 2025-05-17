@@ -4,3 +4,6 @@
 [submodule "repos/periphery"]
 	path = repos/periphery
 	url = git@github.com:everyprotocol/periphery.git
+[submodule "repos/kind-as"]
+	path = repos/kind-as
+	url = git@github.com:everyprotocol/kind-as.git

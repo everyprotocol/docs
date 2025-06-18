@@ -1,17 +1,18 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "linden",
+  "theme": "almond",
   "name": "Every Protocol",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/every-black.svg",
+    "dark": "/logo/every-white.svg",
+    "href": "https://efun.vercel.app"
   },
   "colors": {
-    "primary": "#FF3E57",
-    "light": "#FF3E57",
-    "dark": "#FF3E57"
+    "primary": "#16A34A",
+    "light": "#07C983",
+    "dark": "#15803D"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/every-favicon.svg",
   "navigation": {
     "tabs": [
       {
@@ -127,7 +128,7 @@
     "socials": {
       "x": "https://x.com/everyprotocol",
       "github": "https://github.com/everyprotocol",
-      "website": "https://everyfun.vercel.app"
+      "website": "https://efun.vercel.app"
     }
   }
 }

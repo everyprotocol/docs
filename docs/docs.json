@@ -36,6 +36,15 @@
         ]
       },
       {
+        "tab": "Get Started",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["get-started/wallets", "get-started/register-matters", "get-started/register-kinds"]
+          }
+        ]
+      },
+      {
         "tab": "Tutorials",
         "groups": [
           {

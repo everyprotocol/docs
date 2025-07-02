@@ -3,9 +3,8 @@
   "theme": "mint",
   "name": "Every Protocol",
   "logo": {
-    "light": "/logo/every-black.svg",
-    "dark": "/logo/every-white.svg",
-    "href": "https://efun.vercel.app"
+    "light": "/logo/docs-black.svg",
+    "dark": "/logo/docs-white.svg"
   },
   "colors": {
     "primary": "#16A34A",
@@ -16,28 +15,31 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Learn",
-        "groups": [
-          {
-            "group": "Basics",
-            "pages": [
-              "concepts/overview",
-              "concepts/objects",
-              "concepts/elements",
-              "concepts/kinds",
-              "concepts/sets",
-              "concepts/relations"
-            ]
-          },
-          {
-            "group": "Advanced",
-            "pages": ["concepts/pocc", "concepts/projection-layer", "concepts/ovm"]
-          }
-        ]
-      },
-      {
         "tab": "Get Started",
+        "global": {
+          "anchors": [
+            {
+              "icon": "compass",
+              "anchor": "Developer Interface",
+              "href": "https://dev.every.fun"
+            },
+            {
+              "icon": "faucet-drip",
+              "anchor": "Testnet Faucet",
+              "href": "https://faucet.every.fun"
+            },
+            {
+              "icon": "signal",
+              "anchor": "Status Page",
+              "href": "https://status.every.fun/status/every"
+            }
+          ]
+        },
         "groups": [
+          {
+            "group": "Introduction",
+            "pages": ["get-started/every"]
+          },
           {
             "group": "Get Started",
             "pages": ["get-started/wallets", "get-started/register-matters", "get-started/register-kinds"]
@@ -45,25 +47,45 @@
         ]
       },
       {
-        "tab": "Tutorials",
+        "tab": "Learn",
+        "groups": [
+          {
+            "group": "Concepts",
+            "pages": [
+              "learn/concepts/objects",
+              "learn/concepts/elements",
+              "learn/concepts/kinds",
+              "learn/concepts/sets",
+              "learn/concepts/relations"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": ["learn/concepts/pocc", "learn/concepts/projection-layer", "learn/concepts/ovm"]
+          }
+        ]
+      },
+
+      {
+        "tab": "Cookbook",
         "groups": [
           {
             "group": "Guides",
             "pages": [
-              "tutorials/get-started",
-              "tutorials/register-matters",
-              "tutorials/register-values",
-              "tutorials/register-uniques",
-              "tutorials/register-kinds",
-              "tutorials/register-sets",
-              "tutorials/register-relations",
-              "tutorials/relate-objects",
-              "tutorials/mint-objects"
+              "cookbook/get-started",
+              "cookbook/register-matters",
+              "cookbook/register-values",
+              "cookbook/register-uniques",
+              "cookbook/register-kinds",
+              "cookbook/register-sets",
+              "cookbook/register-relations",
+              "cookbook/relate-objects",
+              "cookbook/mint-objects"
             ]
           },
           {
             "group": "Developers",
-            "pages": ["tutorials/writing-kind-contracts", "tutorials/writing-set-contracts"]
+            "pages": ["cookbook/writing-kind-contracts", "cookbook/writing-set-contracts"]
           }
         ]
       },
@@ -116,14 +138,12 @@
         "tab": "Reference",
         "groups": [
           {
-            "group": "Reference",
-            "pages": [
-              "reference/every-cli",
-              "reference/kasc",
-              "reference/kind-as",
-              "reference/core",
-              "reference/periphery"
-            ]
+            "group": "CLI",
+            "pages": ["reference/every-cli", "reference/kasc"]
+          },
+          {
+            "group": "API",
+            "pages": ["reference/kind-as", "reference/core", "reference/periphery"]
           },
           {
             "group": "Resources",
@@ -132,6 +152,19 @@
         ]
       }
     ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Github",
+        "href": "https://github.com/everyprotocol"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Every.fun",
+      "href": "https://efun.vercel.app"
+    }
   },
   "footer": {
     "socials": {

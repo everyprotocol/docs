@@ -7,9 +7,9 @@
     "dark": "/logo/docs-white.svg"
   },
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#00D0FF",
+    "light": "#00DDFF",
+    "dark": "#00D0FF"
   },
   "favicon": "/every-favicon.svg",
   "navigation": {
@@ -19,8 +19,8 @@
         "global": {
           "anchors": [
             {
-              "icon": "compass",
-              "anchor": "Developer Interface",
+              "icon": "code",
+              "anchor": "Developer Portal",
               "href": "https://dev.every.fun"
             },
             {
@@ -41,8 +41,13 @@
             "pages": ["get-started/every"]
           },
           {
-            "group": "Get Started",
-            "pages": ["get-started/wallets", "get-started/register-matters", "get-started/register-kinds"]
+            "group": "Quickstart",
+            "pages": [
+              "get-started/wallets",
+              "get-started/register-matters",
+              "get-started/register-sets",
+              "get-started/register-kinds"
+            ]
           }
         ]
       },

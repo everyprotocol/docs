@@ -167,15 +167,15 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Every.fun",
-      "href": "https://efun.vercel.app"
+      "label": "Every",
+      "href": "https://every.fun"
     }
   },
   "footer": {
     "socials": {
       "x": "https://x.com/everyprotocol",
       "github": "https://github.com/everyprotocol",
-      "website": "https://efun.vercel.app"
+      "website": "https://every.fun"
     }
   }
 }

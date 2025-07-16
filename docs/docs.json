@@ -43,10 +43,10 @@
           {
             "group": "Quickstart",
             "pages": [
-              "get-started/wallets",
-              "get-started/register-matters",
-              "get-started/register-sets",
-              "get-started/register-kinds"
+              "get-started/set-up-wallets",
+              "get-started/register-a-matter",
+              "get-started/create-a-set",
+              "get-started/define-a-kind"
             ]
           }
         ]

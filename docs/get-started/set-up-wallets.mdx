@@ -1,0 +1,76 @@
+---
+title: "Set Up Wallets"
+---
+
+Working with Every Protocol typically involves interacting with two types of chains:
+
+* The universe chain (such as Ethereum or Base)
+* The observer chain (Every Network)
+
+Every Network supports [unified accounts](/network/accounts), allowing users to use the same address and private key as on their preferred universe chains.
+
+You can either import an existing account or create a new one, using a wallet extension or the CLI.
+
+## Use Wallet Extensions
+
+We recommend installing one of the following browser wallet extensions:
+
+* [SubWallet](https://subwallet.app)
+* [Talisman](https://talisman.xyz)
+
+These extensions support both Substrate accounts and Ethereum accounts.
+
+You can:
+
+* Create a new wallet from scratch
+* Import an existing wallet using your seed phrase or private key
+
+## Using the CLI
+
+You can also generate or import a wallet in your terminal using the `every` CLI:
+
+### Install every-cli
+
+```bash
+npm i @everyprotocol/every-cli
+```
+
+### Generate a new wallet
+
+```bash
+every wallet generate
+```
+
+### Import an existing wallet
+
+```bash
+every wallet --import
+```
+
+## Get Testnet Tokens
+
+Once your wallet is set up, you can request testnet tokens:
+
+1. Visit [Every faucet](https://faucet.every.fun)
+2. Paste your wallet address and click the request button
+
+## Check Your Balance
+
+To view your account balances, you can use either the Developer Portal or CLI.
+
+### Developer Portal
+
+* Open the [Developer Portal](https://portal.every.fun)
+* Navigate to **Accounts** => **Accounts**
+* You’ll see balances for all accounts injected by your wallet
+
+You can also check the balance of any address manually:
+
+* Go to **Accounts** => **Address Book**
+* Add a new contact and enter the address you're interested in
+
+### CLI
+
+```bash
+every wallet balance
+```

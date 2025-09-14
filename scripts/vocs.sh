@@ -1,8 +1,10 @@
 #!/bin/env bash
 set -e
 
-
 DOCS=vocs/docs/pages/docs
+mkdir ${DOCS}/reference
+mkdir ${DOCS}/contracts/{core,periphery}
+
 # every-cli
 echo "generating every-cli.md ..."
 (cd repos/every-cli; bun install; bunx commander-docgen --entry src/program.ts --out every-cli.md)

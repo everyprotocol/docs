@@ -2,8 +2,8 @@
 set -e
 
 DOCS=vocs/docs/pages/docs
-mkdir ${DOCS}/reference
-mkdir ${DOCS}/contracts/{core,periphery}
+mkdir -p ${DOCS}/reference
+mkdir -p ${DOCS}/contracts/{core,periphery}
 
 # every-cli
 echo "generating every-cli.md ..."

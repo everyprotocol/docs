@@ -1,0 +1,43 @@
+---
+title: kasc
+---
+
+Compile kind contracts to Wasm
+
+## Install
+
+:::code-group
+
+```bash bun
+bun a -g @everyprotocol/kind-as
+```
+
+```bash npm
+npm i -g @everyprotocol/kind-as
+```
+
+:::
+
+
+## Usage
+
+Compile kind contracts to Wasm
+
+```bash
+kasc --help
+```
+
+```
+Usage: kasc [options] <file>
+
+Compile kind contracts to Wasm
+
+Arguments:
+  file              AssemblyScript source file
+
+Options:
+  -o, --out <wasm>  Path to output .wasm file
+  -t, --text <wat>  Also emit .wat file to this path
+  -l, --lib <lib>   Use custom std lib instead of bundled one
+  -h, --help        display help for command
+```

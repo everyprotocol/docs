@@ -1,0 +1,311 @@
+**Inherits:**
+IERC165
+
+Minimal interface for set contracts
+
+
+## Functions
+### upgrade
+
+Upgrade an object to a new kind or set revision
+
+
+```solidity
+function upgrade(uint64 id, uint32 kindRev0, uint32 setRev0) external returns (Descriptor memory od);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`kindRev0`|`uint32`|New kind revision (0 = no change)|
+|`setRev0`|`uint32`|New set revision (0 = no change)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`od`|`Descriptor`|Descriptor after upgrade|
+
+
+### touch
+
+Touch an object to increment revision without content change
+
+
+```solidity
+function touch(uint64 id) external returns (Descriptor memory od);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`od`|`Descriptor`|Descriptor after touch|
+
+
+### transfer
+
+Transfer ownership of an object
+
+
+```solidity
+function transfer(uint64 id, address to) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`to`|`address`|Address of the new owner|
+
+
+### uri
+
+Get URI template for metadata
+
+*Client should replace `{id}` and `{rev}` placeholders*
+
+
+```solidity
+function uri() external view returns (string memory uri_);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`uri_`|`string`|URI template string|
+
+
+### owner
+
+Get current owner of an object
+
+
+```solidity
+function owner(uint64 id) external view returns (address owner_);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner_`|`address`|Current owner address|
+
+
+### revision
+
+Resolve and validate a revision number
+
+
+```solidity
+function revision(uint64 id, uint32 rev0) external view returns (uint32 rev);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`rev0`|`uint32`|Revision to check (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rev`|`uint32`|Valid revision (0 if invalid)|
+
+
+### descriptor
+
+Get descriptor at a specific revision
+
+
+```solidity
+function descriptor(uint64 id, uint32 rev0) external view returns (Descriptor memory od);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`rev0`|`uint32`|Revision number (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`od`|`Descriptor`|Descriptor at that revision|
+
+
+### elements
+
+Get elements at a specific revision
+
+
+```solidity
+function elements(uint64 id, uint32 rev0) external view returns (bytes32[] memory elems);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`rev0`|`uint32`|Revision number (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`elems`|`bytes32[]`|Elements array at that revision|
+
+
+### sota
+
+Get the latest descriptor and current owner
+
+
+```solidity
+function sota(uint64 id) external view returns (Descriptor memory od, address owner_);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`od`|`Descriptor`|Descriptor at the specified revision|
+|`owner_`|`address`|Current owner (not historical)|
+
+
+### snapshot
+
+Get descriptor and elements at a specific revision
+
+
+```solidity
+function snapshot(uint64 id, uint32 rev0) external view returns (Descriptor memory od, bytes32[] memory elems);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`rev0`|`uint32`|Revision number to query (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`od`|`Descriptor`|Descriptor at the specified revision|
+|`elems`|`bytes32[]`|Elements at the specified revision|
+
+
+## Events
+### Created
+Emitted when a new object is created
+
+
+```solidity
+event Created(uint64 id, Descriptor od, bytes32[] elems, address owner);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`od`|`Descriptor`|Object descriptor|
+|`elems`|`bytes32[]`|Elements of the object|
+|`owner`|`address`|Initial owner|
+
+### Updated
+Emitted when an object is updated
+
+
+```solidity
+event Updated(uint64 id, Descriptor od, bytes32[] elems);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`od`|`Descriptor`|Updated descriptor|
+|`elems`|`bytes32[]`|Updated elements|
+
+### Upgraded
+Emitted when an object is upgraded
+
+
+```solidity
+event Upgraded(uint64 id, Descriptor od);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`od`|`Descriptor`|Descriptor after upgrade|
+
+### Touched
+Emitted when an object is touched (bumped without content change)
+
+
+```solidity
+event Touched(uint64 id, Descriptor od);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`od`|`Descriptor`|Latest descriptor|
+
+### Destroyed
+Emitted when an object is destroyed
+
+
+```solidity
+event Destroyed(uint64 id, Descriptor od);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`od`|`Descriptor`|Descriptor before destruction|
+
+### Transferred
+Emitted when ownership is transferred
+
+
+```solidity
+event Transferred(uint64 id, address from, address to);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Object ID|
+|`from`|`address`|Previous owner|
+|`to`|`address`|New owner|
+

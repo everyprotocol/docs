@@ -1,0 +1,357 @@
+Interface for registering and managing values
+
+
+## Functions
+### valueRegister
+
+Registers a new value token
+
+
+```solidity
+function valueRegister(address code, bytes32 data, TokenStandard std, uint8 decimals, string memory symbol)
+    external
+    returns (uint64 id, Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`code`|`address`|Token contract address|
+|`data`|`bytes32`|Hash of the underlying matter or metadata|
+|`std`|`TokenStandard`|Token standard (e.g. ERC20)|
+|`decimals`|`uint8`|Token's decimal precision|
+|`symbol`|`string`|Display symbol (max 30 characters)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|New value ID|
+|`desc`|`Descriptor`|Descriptor after registration|
+
+
+### valueUpdate
+
+Updates the data hash of an existing value
+
+
+```solidity
+function valueUpdate(uint64 id, bytes32 data) external returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+|`data`|`bytes32`|New data hash|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Updated descriptor (revision bumped)|
+
+
+### valueUpdate
+
+Updates the data hash and symbol of an existing value
+
+
+```solidity
+function valueUpdate(uint64 id, bytes32 data, string memory symbol) external returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+|`data`|`bytes32`|New data hash|
+|`symbol`|`string`|New display symbol|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Updated descriptor|
+
+
+### valueUpgrade
+
+Upgrades the kind/set revision of a value
+
+
+```solidity
+function valueUpgrade(uint64 id, uint32 kindRev0, uint32 setRev0) external returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+|`kindRev0`|`uint32`|New kind revision (0 = no change)|
+|`setRev0`|`uint32`|New set revision (0 = no change)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Descriptor after upgrade|
+
+
+### valueTouch
+
+Touches a value, bumping its revision without changing its content
+
+
+```solidity
+function valueTouch(uint64 id) external returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Descriptor after touch|
+
+
+### valueTransfer
+
+Transfers ownership of a value to a new address
+
+
+```solidity
+function valueTransfer(uint64 id, address to) external returns (address from);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+|`to`|`address`|Address to transfer ownership to|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`from`|`address`|Address of the previous owner|
+
+
+### valueRevision
+
+Resolves and validates a revision of a value
+
+
+```solidity
+function valueRevision(uint64 id, uint32 rev0) external view returns (uint32 rev);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+|`rev0`|`uint32`|Requested revision (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`rev`|`uint32`|Validated revision (0 = not found)|
+
+
+### valueDescriptor
+
+Returns the descriptor of a value at a specific revision
+
+
+```solidity
+function valueDescriptor(uint64 id, uint32 rev0) external view returns (Descriptor memory desc);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+|`rev0`|`uint32`|Revision to query (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Descriptor at the given revision|
+
+
+### valueSnapshot
+
+Returns descriptor and elements of a value at a specific revision
+
+
+```solidity
+function valueSnapshot(uint64 id, uint32 rev0) external view returns (Descriptor memory desc, bytes32[] memory elems);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+|`rev0`|`uint32`|Revision to query (0 = latest)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Descriptor at the given revision|
+|`elems`|`bytes32[]`|Element values at the given revision|
+
+
+### valueOwner
+
+Returns the current owner of a value
+
+
+```solidity
+function valueOwner(uint64 id) external view returns (address owner);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|Current owner's address|
+
+
+### valueSota
+
+Returns the latest descriptor and current owner of a value
+
+
+```solidity
+function valueSota(uint64 id) external view returns (Descriptor memory desc, address owner);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|Value ID|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`desc`|`Descriptor`|Latest descriptor|
+|`owner`|`address`|Current owner's address|
+
+
+### valueStatus
+
+Checks whether all specified values are active (revision > 0)
+
+
+```solidity
+function valueStatus(uint64[] memory ids) external view returns (bool active);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`ids`|`uint64[]`|Array of value IDs|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`active`|`bool`|True if all values exist and are active|
+
+
+## Events
+### ValueRegistered
+Emitted when a new value is registered
+
+
+```solidity
+event ValueRegistered(uint64 id, Descriptor desc, address code, bytes32 data, TokenSpec spec, address owner);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|ID of the newly registered value|
+|`desc`|`Descriptor`|Descriptor of the value|
+|`code`|`address`|Token contract address|
+|`data`|`bytes32`|Hash of the underlying asset or metadata|
+|`spec`|`TokenSpec`|Token specification (standard, decimals, symbol)|
+|`owner`|`address`|Address of the initial owner|
+
+### ValueUpdated
+Emitted when a value is updated
+
+
+```solidity
+event ValueUpdated(uint64 id, Descriptor desc, bytes32 data, TokenSpec spec);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|ID of the value|
+|`desc`|`Descriptor`|Updated descriptor (with bumped revision)|
+|`data`|`bytes32`|New hash of the asset or metadata|
+|`spec`|`TokenSpec`|Updated or unchanged token specification|
+
+### ValueUpgraded
+Emitted when a value is upgraded (revision of kind/set updated)
+
+
+```solidity
+event ValueUpgraded(uint64 id, Descriptor desc);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|ID of the value|
+|`desc`|`Descriptor`|Descriptor after upgrade|
+
+### ValueTouched
+Emitted when a value is touched (revision bump only, no content change)
+
+
+```solidity
+event ValueTouched(uint64 id, Descriptor desc);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|ID of the value|
+|`desc`|`Descriptor`|Descriptor after touch|
+
+### ValueTransferred
+Emitted when ownership of a value is transferred
+
+
+```solidity
+event ValueTransferred(uint64 id, address from, address to);
+```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`id`|`uint64`|ID of the value|
+|`from`|`address`|Previous owner address|
+|`to`|`address`|New owner address|
+

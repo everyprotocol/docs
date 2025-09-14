@@ -1,0 +1,64 @@
+A relation defines possible interactions between different kinds of objects. objects supports all the interactions defined by their kinds by default, exceptly ristricted by specially.
+
+A relation is also an object.
+
+## Relation Object
+
+### Metadata
+
+The metadata of a realtion object contains essential information about its type and versioning.
+
+| Field     | Description                              |
+|-----------|------------------------------------------|
+| `traits`   | Flags, 0 for now (reserved for future use)   |
+| `rev`     | Revision number, starting with 0, increased after     |
+| `krev`    | Revision of the Kind of Set              |
+| `srev`    | Revision of the Set of Set               |
+| `kind`    | The id of the kind object of this relation object |
+| `set`     | The id of the set object of this relation object |
+
+
+### Elements
+
+| Index | Element   | Mutable | Description                                              |
+|-------|-----------|---------|----------------------------------------------------------|
+| `0`   | `data`    | Yes     | Shared data for all objects minted from this set         |
+| `1`   | `code`    | Yes     | Address of the relation contract                         |
+| `2`   | `poss`    | No      | Address of the relation contract                         |
+| `3`   | `adjs[0]` | Yes     | Shared data for all objects minted from this set         |
+| `4`   | `adjs[1]` | Yes     | Shared data for all objects minted from this set         |
+
+#### Possession
+
+The `possession` element defines the processing of the ownership of the departure objects when they are connected or disconnected from destination objects.
+
+#### Adjacency
+
+Each `adj_spec_n` element is composed of two tuples: `(dep_kind, min, max)`, `(dep_kind, min, max)`.
+
+- **dep_kind**: The kind ID of the departure object, a `uint64` integer.
+- **min**: The minimum number of objects that the destination object can accept, a `uint32` integer.
+- **max**: The maximum number of objects that the destination object can accept, a `uint32` integer.
+
+The last tuple `(dep_kind, min, max)` of the last `adj_spec_n` can be all zeros, indicating the end of the adjacency spec array.
+
+Normal `dep_kind`s must be an integer in the range of [1, \(2^{64} - 2\)].
+
+A wildcard `dep_kind` has a value of `2^{32} - 1`, meaning any kind.
+
+The `(dep_kind, min, max)` tuples must be in increasing order. If a wildcard adjacency spec exists, it must be the last valid one.
+
+`min` and `max` can be any `uint32` integer in the range [0, \(2^{32} - 1\)], as long as `max >= min`.
+
+If `max` equals \(2^{32} - 1\), it means unlimited.
+
+
+## Omni Registry
+
+Set objects support the following operations:
+
+| Operation          | Description                                              |
+|--------------------|----------------------------------------------------------|
+| `register_relation`| Registers a new set into the registry.                   |
+| `update_relation`  | Updates the mutable elements of an existing set.         |
+| `upgrade_relation` | Applies a new revision of kind or set to the set object. |

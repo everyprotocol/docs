@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --logo-url: url("/every-combo-light.svg");
+}
+:root.dark {
+  --logo-url: url("/every-combo-dark.svg");
+}
+
+.logo {
+  background-image: var(--logo-url);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  display: block;
+  height: 3rem; /* 48px */
+  width: 10rem; /* 160px */
+}
+
+.feature {
+  border-color: var(--vocs-color_border);
+}
+
+.feature.desc {
+  color: var(--vocs-color_text4);
+  font-weight: bolder;
+}

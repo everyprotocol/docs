@@ -1,0 +1,75 @@
+---
+layout: landing
+showLogo: false
+content:
+  width: 100%
+---
+
+import { HomePage, Sponsors } from 'vocs/components'
+import Custom, {Hello, Feature} from '../components/Custom'
+import "../style.css";
+import { CheckCircleIcon, ShieldCheckIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
+
+
+<div className="flex flex-col gap-8 mx-auto max-w-5xl px-4 md:px-6 lg:px-8 py-16 items-center">
+<div className="logo"/>
+<HomePage.Tagline>A new paradigm of co-creation — with humans, AIs, and their networks</HomePage.Tagline>
+<div className="grid grid-cols-2 gap-4">
+    <div className="flex flex-col gap-4">
+    <HomePage.Description>From trading floors to social feeds, NFTs are still about collecting. Most human creativity remains off-chain, while AI is already creating. Every empowers all creators — human or AI — create and collaborate onchain.</HomePage.Description>
+    </div>
+    <HomePage.InstallPackage name="vocs" type="init" />
+</div>
+<HomePage.Buttons>
+    <HomePage.Button href="/getting-started" variant="accent">Get started</HomePage.Button>
+    <HomePage.Button href="https://github.com/wevm/vocs">GitHub</HomePage.Button>
+</HomePage.Buttons>
+</div>
+
+<article className="flex flex-col mx-auto max-w-4xl gap-2">
+
+# Object Token
+
+---
+
+A token standard for structured, semantic objects — mutable, upgradeable, and interoperable, built for humans and AIs
+
+<div className="grid grid-cols-3 gap-4 pt-4">
+  <Feature title="Mutable" desc="AERC-721 and 1155 shaped NFTs around trading and collecting. Object Token introduces mutability and upgradability — unlocking richer, evolving use cases."/>
+  <Feature title="Interoperable" desc="Object Tokens define relations at the kind level, enabling them to interact — even if minted from contracts by different creators."/>
+  <Feature title="Semantic" desc="With element-based state and kind-level logic, Object Tokens are programmable and secure — ready for a future shaped by humans and AIs."/>
+</div>
+
+# Every Protocol
+
+Every Protocol powers onchain co-creation — with composable objects, reusable logic, programmable revenue, and shared rewards
+
+<div className="grid grid-cols-3 gap-4 pt-4">
+  <Feature title="Co-creation made simple" desc="Every Protocol defines elements, kinds, sets, and relations — enabling creators, developers to build together. Every contribution is onchain and composable."/>
+  <Feature title="Build objects and connections" desc="Kind-level relations let objects interact — even across creators — enabling recreation, collaboration, and richer utility, making them more fun to build on."/>
+  <Feature title="Create, earn, get rewarded" desc="Every Protocol monetizes and rewards creation — with revenue for authors and shared incentives for those who evolve and expand what’s been made."/>
+</div>
+
+# Every Network
+
+Every Network extends chains by computing object assets — enabling attributable and verifiable co-creation
+
+<div className="grid grid-cols-2 gap-4 pt-4">
+  <Feature title="Projection Layer" desc="Every Network isn’t a competing Layer 1 or a offloading Layer 2. It’s a projection layer extending chains by executing kind contracts and rendering the “images” of objects."/>
+  <Feature title="Unified Accounts" desc="Every Network supports multiple chains and unified accounts, users keep the same address and signing key as on the chain their token contracts live on."/>
+  <Feature title="Object Virtual Machine" desc="OVM computes assets from an object’s state, validates which elements can be used, and facilitates contribution-based revenue sharing and rewarding."/>
+  <Feature title="Proof of Co-Creation" desc="Every Network is a PoCC chain — crediting pre-mint contributions, tracing post-mint recreations, and ensuring transparent, verifiable ownership and value flow."/>
+</div>
+
+
+# Community
+
+Join the Community
+
+ - Ask for support in the [Telegram chat](https://t.me/foundry_support) or create an [issue on Github](https://github.com/foundry-rs/foundry/issues)
+ - Join the 500+ developers by [contributing](https://github.com/foundry-rs/foundry/blob/master/CONTRIBUTING.md) to Foundry
+
+# Sponsors
+
+<Sponsors/>
+</article>

@@ -1,0 +1,113 @@
+---
+title: "Define a Kind"
+---
+
+This guide walks you through defining a custom kind contract in Every Protocol.
+
+In this example, we'll build a simple kind called `Dice`, where each object has two elements: a `face value` and a `background color`. The kind will define two asset functions: `meta()` and `picture()`.
+
+## Design the Kind
+
+Objects of this kind will have:
+
+* `face`: the value shown on the die (1–6)
+* `bg`: the background color
+
+The kind will define two asset functions:
+
+* `meta()`: returns metadata such as name and description
+* `picture()`: generates an image of the dice
+
+## Write the Kind Contract
+
+### Create a project from a template
+
+Use the `bun create` command to scaffold your project:
+
+```bash
+bun create everytemplate/kind dice
+```
+
+This sets up a new project with starter code in a folder called `dice`.
+
+### Implement the asset functions
+
+Open `dice/index.ts` and implement the logic for `meta()` and `picture()` using the elements `face` and `bg`.
+
+Example:
+
+```ts
+@kind
+class Dice {
+  face!: u8;
+  bg!: Bytes32;
+
+  meta(): Json {
+    let data = json.create("{}");
+    json.setString(data, "/name", `Dice #${object.id}`);
+    json.setString(data, "/description", "A six-sided die created using the Dice kind.");
+    return data;
+  }
+
+  picture(): Image {
+    let canvas = image.fill(this.bg, 800, 800);
+    return image.drawText(canvas, `${this.face}`, 360, 400);
+  }
+}
+```
+
+### Build the contract
+
+```bash
+cd dice
+bun run build
+```
+
+This compiles the `Dice` kind contract to WebAssembly.
+
+### Examine the wasm code
+
+To inspect the output binary:
+
+```bash
+wasm-objdump -h build/index.wasm
+```
+
+Look for custom sections like `kindcomp`, `kindelms`, and `kindfcts`.
+
+You can view section content using:
+
+```bash
+wasm-custom-section build/index.wasm show kindcomp
+```
+
+## Register the Kind
+
+### 1. Upload the compiled wasm as a matter
+
+```bash
+every matter register build/index.wasm
+```
+
+This returns a `matterId`, which will be used in the next step.
+
+### 2. Register the kind
+
+```bash
+every kind register <codeHash> <dataHash> '[1, 2]' '[]'
+```
+
+Arguments:
+
+* `<codeHash>`: the hash of your wasm file (from matter registration)
+* `<dataHash>`: metadata for the kind (can be empty or a JSON blob)
+* `'[1, 2]'`: specifies the element types (1 = value, 2 = unique, etc.)
+* `'[]'`: list of supported relation IDs (can be empty)
+
+Run `every kind register -h` to see all available options:
+
+```bash
+every kind register -h
+```
+
+You’ve now defined and registered a kind contract. In the next guide, we’ll show how to create a set that uses this kind, and mint objects from it.

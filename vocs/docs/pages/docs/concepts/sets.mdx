@@ -1,0 +1,38 @@
+A Set is a meta object from which other objects are created.
+
+## Set Object
+
+### Metadata
+
+The metadata of a set object contains essential information about its type and versioning.
+
+| Field     | Value                   | Description                              |
+|-----------|-------------------------|------------------------------------------|
+| `traits`  | `0`                     | Status flags (reserved for future use)   |
+| `rev`     | `1`                     | Current revision number                  |
+| `krev`    | `latestKindOfSet()`     | Revision of the Kind of Set              |
+| `srev`    | `latestSetOfSet()`      | Revision of the Set of Set               |
+| `kind`    | `ID_KIND_OF_SET`        | Kind ID (always points to Kind of Set)   |
+| `set`     | `ID_SET_OF_SET`         | Set ID (always points to Set of Set)     |
+
+### Elements
+
+Each set has **2 elements**, defined by its kind, the **Kind of Set**.
+
+| Index | Element   | Mutable | Description                                              |
+|-------|-----------|---------|----------------------------------------------------------|
+| `0`   | `data`    | Yes     | Shared data for all objects minted from this set         |
+| `1`   | `code`    | No      | Address of the set contract                              |
+
+## Set Contract
+
+
+## Set Registry
+
+Set objects support the following operations:
+
+| Operation      | Description                                                 |
+|----------------|-------------------------------------------------------------|
+| `register_set`| Registers a new set into the registry.                       |
+| `update_set`  | Updates the mutable elements of an existing set.             |
+| `upgrade_set` | Applies a new revision of kind or set to the set object.     |

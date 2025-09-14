@@ -1,9 +1,9 @@
 [submodule "repos/every-cli"]
 	path = repos/every-cli
-	url = git@github.com:everyprotocol/cli.git
+	url = https://github.com/everyprotocol/cli.git
 [submodule "repos/periphery"]
 	path = repos/periphery
-	url = git@github.com:everyprotocol/periphery.git
+	url = https://github.com/everyprotocol/periphery.git
 [submodule "repos/kind-as"]
 	path = repos/kind-as
-	url = git@github.com:everyprotocol/kind-as.git
+	url = https://github.com/everyprotocol/kind-as.git

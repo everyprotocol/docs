@@ -39,6 +39,7 @@ export const sidebar: Sidebar = [
           { text: "Omni Registry", link: "/docs/contracts/core/OmniRegistry" },
           { text: "Kind Registry", link: "/docs/contracts/core/KindRegistry" },
           { text: "Element Registry", link: "/docs/contracts/core/ElementRegistry" },
+          { text: "Object Minter", link: "/docs/contracts/core/ObjectMinter" },
         ],
       },
       {
@@ -46,10 +47,9 @@ export const sidebar: Sidebar = [
         collapsed: false,
         items: [
           { text: "ISet", link: "/docs/contracts/periphery/ISet" },
-          { text: "ISetRegistryAdmin", link: "/docs/contracts/periphery/ISetRegistryAdmin" },
           { text: "IInteroperable", link: "/docs/contracts/periphery/IInteroperable" },
-          { text: "IRemotMintable", link: "/docs/contracts/periphery/IRemoteMintable" },
-          { text: "IObjectMinterAdmin", link: "/docs/contracts/periphery/IObjectMinterAdmin" },
+          { text: "ISetRegistryHook", link: "/docs/contracts/periphery/ISetRegistryHook" },
+          { text: "IObjectMinterHook", link: "/docs/contracts/periphery/IObjectMinterHook" },
         ],
       },
     ],

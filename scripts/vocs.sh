@@ -45,8 +45,8 @@ EOF
 tail -n +6 "$repo/docs/src/contracts/interfaces/core/I${name}.sol/interface.I${name}.md" >> $file
 echo "written to ${DOCS}/contracts/core/${name}.mdx"
 
-for name in ISet IInteroperable IRemoteMintable ISetRegistryAdmin IObjectMinterAdmin; do
-    tail -n +4 "$repo/docs/src/contracts/interfaces/user/${name}.sol/interface.${name}.md" \
+for name in ISet IInteroperable ISetRegistryHook IObjectMinterHook; do
+    tail -n +7 "$repo/docs/src/contracts/interfaces/user/${name}.sol/interface.${name}.md" \
         > "${DOCS}/contracts/periphery/${name}.mdx"
     echo "written to ${DOCS}/contracts/periphery/${name}.mdx"
 done

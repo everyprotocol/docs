@@ -1,3 +1,6 @@
 vocs/docs/dist
+vocs/docs/pages/docs/contracts/core
+vocs/docs/pages/docs/contracts/periphery
+vocs/docs/pages/docs/reference
 vocs/node_modules
 .aider*

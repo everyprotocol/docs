@@ -69,7 +69,13 @@ export const sidebar: Sidebar = [
       { text: "Deployment", link: "/docs/network/deployment" },
     ],
   },
-
+  {
+    text: "Reference",
+    items: [
+      { text: "every", link: "/docs/reference/every-cli" },
+      { text: "kasc", link: "/docs/reference/kasc" },
+    ],
+  },
   {
     text: "Miscellaneous",
     items: [

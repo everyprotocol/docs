@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "curl -L https://foundry.paradigm.xyz | bash && /vercel/.foundry/bin/foundryup",
-  "buildCommand": "export PATH=$PATH:$HOME/.foundry/bin && bash scripts/vocs.sh && cd vocs && bun i && bun run build -c && echo 'PWD='$(pwd) && ls -lah docs && ls -lah ..",
+  "buildCommand": "export PATH=$PATH:$HOME/.foundry/bin && bash scripts/vocs.sh && cd vocs && bun i && bun run build -c -o abc && echo 'PWD='$(pwd) && ls -lah docs && ls -lah ..",
   "outputDirectory": "vocs/docs/dist"
 }

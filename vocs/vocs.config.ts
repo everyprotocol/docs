@@ -4,7 +4,7 @@ import { sidebar } from "./docs/sidebar";
 export default defineConfig({
   theme: {
     accentColor: {
-      light: "#39aaaa",
+      light: "#00DADA",
       dark: "#00FFFF",
     },
   },

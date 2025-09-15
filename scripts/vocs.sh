@@ -24,31 +24,35 @@ repo=repos/periphery
 
 for name in SetRegistry KindRegistry ObjectMinter \
     RelationRegistry ObjectInteraction ObjectAuthorization ValueRegistry UniqueRegistry ; do
-    tail -n +4 "$repo/docs/src/contracts/interfaces/core/I${name}.sol/interface.I${name}.md" \
-    > "${DOCS}/contracts/core/${name}.mdx"
-    echo "written to ${DOCS}/contracts/core/${name}.mdx"
+    file="${DOCS}/contracts/core/${name}.mdx"
+    echo "# $name" > $file
+    tail -n +4 "$repo/docs/src/contracts/interfaces/core/I${name}.sol/interface.I${name}.md" >> $file
+    echo "written to ${file}"
 done
 
 name=OmniRegistry
 file="${DOCS}/contracts/core/${name}.mdx"
-cat > $file <<EOF
+echo "# ${name}" > $file
+cat >> $file <<EOF
 **Inherits:**
 [RelationRegistry](/docs/contracts/core/RelationRegistry), [ObjectAuthorization](/docs/contracts/core/ObjectAuthorization), [ObjectInteraction](/docs/contracts/core/ObjectInteraction)
 EOF
 tail -n +6 "$repo/docs/src/contracts/interfaces/core/I${name}.sol/interface.I${name}.md" >> $file
-echo "written to ${DOCS}/contracts/core/${name}.mdx"
+echo "written to ${file}"
 
 name=ElementRegistry
 file="${DOCS}/contracts/core/${name}.mdx"
-cat > $file <<EOF
+echo "# ${name}" > $file
+cat >> $file <<EOF
 **Inherits:**
 [ValueRegistry](/docs/contracts/core/ValueRegistry), [UniqueRegistry](/docs/contracts/core/UniqueRegistry)
 EOF
 tail -n +6 "$repo/docs/src/contracts/interfaces/core/I${name}.sol/interface.I${name}.md" >> $file
-echo "written to ${DOCS}/contracts/core/${name}.mdx"
+echo "written to ${file}"
 
 for name in ISet IInteroperable ISetRegistryHook IObjectMinterHook; do
-    tail -n +7 "$repo/docs/src/contracts/interfaces/user/${name}.sol/interface.${name}.md" \
-        > "${DOCS}/contracts/periphery/${name}.mdx"
-    echo "written to ${DOCS}/contracts/periphery/${name}.mdx"
+    file="${DOCS}/contracts/periphery/${name}.mdx"
+    echo "# ${name}" > $file
+    tail -n +7 "$repo/docs/src/contracts/interfaces/user/${name}.sol/interface.${name}.md" >> $file
+    echo "written to ${file}"
 done

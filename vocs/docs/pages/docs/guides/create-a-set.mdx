@@ -2,27 +2,96 @@
 title: "Create a Set"
 ---
 
-a set is where object tokens minted from. it is a token contract conforming to object token standard, and registered at the set registry.
+# Create a Set
 
-objects from a set must have a kind, can be constructed from elements.
+A **set** is the contract from which object tokens are minted in Every Protocol.
+It is a token contract that conforms to the Object Token standard and must be registered in the Set Registry.
 
-we will show how to define a kind in later chapters, for now, we just use an existing kind(the kind of dice, kind id = 18).
+- Each set is assigned a unique **set ID** when registered.
+- Each object minted from a set must specify a **kind** and its **elements**, emitted as events defined by the Object Token standard.
+- The full logic is implemented as a contract deployed on a **universe chain**, called the **set contract**.
 
-every objects minted from this set, will be constructed from two elements, one is a matter in form of image, the other is just an piece of information. we've learned how to register a matter in the previous chapter, the information is a element which don't need to be registered.
+This guide demonstrates how to write a set contract, register it in the Set Registry, and mint objects from it.
 
+## Before You Begin
 
-## determine the kind
+Make sure you have:
 
-## register matters for later use
+1. A kind already created (see [Create a Kind](/docs/guides/create-a-kind))
+2. A wallet set up and funded with tokens
 
-## write a set contract
+## Write a Set Contract
 
-forge init --template everyprotocol/set-simple
+### 1. Initialize a project
 
+Initialize a new set contract project from the template:
+
+```bash
+forge init --template everytemplate/set dice-set
+```
+
+```bash
+cd dice-set
 forge build
+```
 
-every set register
+### 2. Implement contract logic
 
-## register the set
+Edit the contract in src/ to define your set’s logic and behavior.
+For this example we’ll use DiceSet.sol.
 
-## mint an object
+## Register the Set
+
+### 1. Deploy the contract
+```bash
+forge create src/DiceSet.sol:DiceSet \
+  --rpc-url http://anvil.localhost \
+  --account charlie \
+  --constructor-args 0x854C35Fd2b65fE9fcE71dddE91De8c3e1A7Dc8Ae 17 1
+```
+
+### 2. Register it in the Set Registry
+
+Once deployed, register the set contract in the Set Registry:
+
+```bash
+every set register \
+  0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82 \
+  0x7aac8eb4c87ba294324476e11b6bc12787951c4e20a0b4a9966377a1c8381674 \
+  --foundry --account charlie --universe anvil
+```
+The first argument is the set contract address
+	•	The second is the kind hash
+	•	--foundry tells the CLI to use Foundry’s keystore
+	•	--universe specifies the target chain
+
+## Work with Objects
+
+### 1. Mint objects
+
+With the set registered, you can mint new objects from it.
+
+First, encode the element values:
+```bash
+cast abi-encode 'fn(bytes32[])' \
+  '[0xffaaeb0dc1385d1d515c5cc2f2da4a370f644fc75796913a066782e833b19aa8,0xffaaeb0dc1385d1d515c5cc2f2da4a370f644fc75796913a066782e833b19aa8]'
+```
+
+### 2. Update objects
+
+Then call the create function on the set contract:
+```bash
+cast send \
+  --rpc-url http://anvil.localhost \
+  --account alice \
+  0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82 \
+  'create(address,uint64,bytes calldata)' \
+  0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 \
+  0 \
+  0x0000000000000000000000000000000000000000000000000000000000000020\
+0000000000000000000000000000000000000000000000000000000000000002ffaa\
+eb0dc1385d1d515c5cc2f2da4a370f644fc75796913a066782e833b19aa8ffaaeb0d\
+c1385d1d515c5cc2f2da4a370f644fc75796913a066782e833b19aa8
+```
+
+### 3. Access object assets

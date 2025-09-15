@@ -1,12 +1,14 @@
 ---
-title: "Define a Kind"
+title: "Create a Kind"
 ---
+
+# Create a Kind
 
 This guide walks you through defining a custom kind contract in Every Protocol.
 
 In this example, we'll build a simple kind called `Dice`, where each object has two elements: a `face value` and a `background color`. The kind will define two asset functions: `meta()` and `picture()`.
 
-## Design the Kind
+## Goal
 
 Objects of this kind will have:
 
@@ -18,9 +20,11 @@ The kind will define two asset functions:
 * `meta()`: returns metadata such as name and description
 * `picture()`: generates an image of the dice
 
+## Before You Begin
+
 ## Write the Kind Contract
 
-### Create a project from a template
+### 1. Intialize a project
 
 Use the `bun create` command to scaffold your project:
 
@@ -30,7 +34,7 @@ bun create everytemplate/kind dice
 
 This sets up a new project with starter code in a folder called `dice`.
 
-### Implement the asset functions
+### 2. Implement contract logic
 
 Open `dice/index.ts` and implement the logic for `meta()` and `picture()` using the elements `face` and `bg`.
 
@@ -56,7 +60,7 @@ class Dice {
 }
 ```
 
-### Build the contract
+### 3. Inspect the kind contract
 
 ```bash
 cd dice
@@ -64,8 +68,6 @@ bun run build
 ```
 
 This compiles the `Dice` kind contract to WebAssembly.
-
-### Examine the wasm code
 
 To inspect the output binary:
 
@@ -83,7 +85,7 @@ wasm-custom-section build/index.wasm show kindcomp
 
 ## Register the Kind
 
-### 1. Upload the compiled wasm as a matter
+### 1. Register the kind wasm as a matter
 
 ```bash
 every matter register build/index.wasm

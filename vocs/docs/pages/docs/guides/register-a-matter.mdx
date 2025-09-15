@@ -2,21 +2,24 @@
 title: "Register a Matter"
 ---
 
-This guide walks you through the process of registering a matter on the Every Testnet.
+# Register a Matter
 
-Since this involves sending a transaction to the Every Network, make sure you’ve already set up a wallet and received some test tokens. See [Set Up Wallets](/docs/guides/set-up-wallets) if you haven’t done that yet.
+This guide walks you through the process of registering a matter on the Every Network.
 
-## What is a Matter?
+## Before You Begin
 
-A matter is an asset — such as an image, file, 3D model, or any raw content — that can be used programmatically to construct objects in Every Protocol.
+Make sure you have:
 
-To learn more, check the [concepts guide on matters](/docs/concepts/elements#matter).
+1. Learned the [concepts of matters](/docs/concepts/elements#matter)
+2. Set up a wallet and funded it with testnet tokens (see [Set Up Wallets](/docs/guides/set-up-wallets))
 
-In this guide, we’ll use a PNG file as an example. You can [download the file]() or use one of your own.
+## Understanding Matters
 
-## Register the Matter
+A **matter** is an asset — such as an image, file, 3D model, or any raw content — that can be used programmatically to construct objects in Every Protocol.
 
-### Using the CLI
+In this guide, we’ll use a PNG file as an example. You can [download the sample file]() or use one of your own.
+
+## Registering a Matter
 
 To register a matter using the CLI:
 
@@ -25,28 +28,16 @@ every matter register ./path/to/file.png -a eve -u base-sepolia
 ```
 
 This command will:
+-	Determine the MIME type and form of the matter from the file extension (you can also specify them manually)
+- Determine the target network using the -u option
+- Use the keystore specified by the -a option to sign and submit the transaction
+- Wait for the transaction to be finalized and print the emitted events
 
-* Determine the MIME type and form of the matter from the file extension (you can also specify them manually)
-* Determine the target network using the `-u` option
-* Use the keystore specified by the `-a` option to sign and submit the transaction
-* Wait for the transaction to be finalized and print the emitted events
+## Accessing the Matter
 
-### Using the Developer Portal
-Alternatively, you can register a matter using the Developer Portal:
+Once registered, matters can be accessed via Every Network gateways using their hash. For example, if the matter you registered has the hash 0x3456, it can be viewed at:
 
-* Open the [Developer Portal](https://portal.every.fun)
-* Click the upper-left corner to switch to the appropriate network (in this case, the testnet)
-* Go to the **Developer → Extrinsics** tab
-* Select an account to sign the transaction
-* Choose the `matter` pallet and the `register(form, mime, blob)` method
-* Fill in the required inputs: `form`, `mime`, and `blob`
-* Click **Submit Transaction**
-
-## Access the Matter
-
-Matters can be accessed via gateways of the Every Network using their hash. For example, if the matter you registered has the hash `0x3456`, it can be viewed at:
-
-* [https://every.im/matter/0x3456](https://every.im/matter/0x3456)
+- [https://every.im/matter/0x3456](https://every.im/matter/0x3456)
 
 Gateways can be run by any network participant. Every Labs maintains the following gateways:
 
@@ -56,4 +47,4 @@ Gateways can be run by any network participant. Every Labs maintains the followi
 | every.im | Testnet |
 | every.fm | Mainnet |
 
-Matters are one of the core building blocks of the protocol. In the following chapters, you’ll see how they are used across various aspects of the protocol, including sets, kinds, and more.
+Matters are foundational to the protocol, and in the following chapters you’ll see how they are used in sets, kinds, and more.

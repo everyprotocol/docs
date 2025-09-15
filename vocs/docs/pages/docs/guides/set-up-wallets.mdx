@@ -2,75 +2,95 @@
 title: "Set Up Wallets"
 ---
 
-Working with Every Protocol typically involves interacting with two types of chains:
+# Set Up Wallets
 
-* The universe chain (such as Ethereum or Base)
-* The observer chain (Every Network)
+To interact with Every Protocol, you’ll need a wallet. Wallets let you sign transactions and manage assets on both:
 
-Every Network supports [unified accounts](/docs/network/accounts), allowing users to use the same address and private key as on their preferred universe chains.
+- Universe chains (such as Ethereum or Base)
+- The observer chain (Every Network)
 
-You can either import an existing account or create a new one, using a wallet extension or the CLI.
+Every Network supports [unified accounts](/docs/network/accounts), so you can use the same address and private key across both types of chains.
+
+You can either import an existing account or create a new one — using a browser extension or the CLI.
 
 ## Use Wallet Extensions
 
-We recommend installing one of the following browser wallet extensions:
+The easiest way to get started is with a browser wallet extension. We recommend:
 
-* [SubWallet](https://subwallet.app)
-* [Talisman](https://talisman.xyz)
+- [SubWallet](https://subwallet.app)
+- [Talisman](https://talisman.xyz)
 
-These extensions support both Substrate accounts and Ethereum accounts.
+These support both **Substrate accounts** and **Ethereum accounts**. With them, you can:
 
-You can:
+- Create a new wallet from scratch
+- Import an existing wallet with a seed phrase or private key
 
-* Create a new wallet from scratch
-* Import an existing wallet using your seed phrase or private key
+## Use the CLI
 
-## Using the CLI
+You can also generate or import a wallet from the terminal using the `every` CLI.
+If you don’t have it installed yet, run:
 
-You can also generate or import a wallet in your terminal using the `every` CLI:
-
-### Install every-cli
-
-```bash
-npm i @everyprotocol/every-cli
+:::code-group
+```bash [bun]
+bun a -g @everyprotocol/every-cli
 ```
+```bash [npm]
+npm i -g @everyprotocol/every-cli
+```
+:::
 
 ### Generate a new wallet
 
+In the examples below we use eve as the wallet name — feel free to choose your own.
+
 ```bash
-every wallet generate
+every wallet new eve -t ethereum
 ```
 
 ### Import an existing wallet
 
 ```bash
-every wallet --import
+every wallet import eve PRIVATE_KEY -t ethereum
+```
+
+### Inspect your wallet
+
+```bash
+every wallet inspect eve
+```
+
+Sample output:
+
+```bash
+every wallet inspect eve
+Password:
+   Keystore: ~/.every/keystores/eve
+ Store Type: substrate
+   Key Type: ethereum
+    Address: 0xD6f31D659F2aC7E72De23423f97874a13ec8D74F
+ Public Key: 0x035b469096f3bf96f89f4e7cbdcb104b220ee3c2335cf36fe2e37747fc4c0b4c09
 ```
 
 ## Get Testnet Tokens
 
-Once your wallet is set up, you can request testnet tokens:
+Once your wallet is ready, you can request testnet tokens:
 
 1. Visit [Every faucet](https://faucet.every.fun)
-2. Paste your wallet address and click the request button
+2. Paste your wallet address and click **Request**
 
 ## Check Your Balance
 
-To view your account balances, you can use either the Developer Portal or CLI.
+You can check balances either via the Developer Portal or the CLI.
 
 ### Developer Portal
 
-* Open the [Developer Portal](https://portal.every.fun)
-* Navigate to **Accounts** => **Accounts**
-* You’ll see balances for all accounts injected by your wallet
-
-You can also check the balance of any address manually:
-
-* Go to **Accounts** => **Address Book**
-* Add a new contact and enter the address you're interested in
+1.	Open the [Developer Portal](https://portal.every.fun)
+2.	Go to **Accounts** → **Accounts** to view balances for all accounts injected by your wallet
+3.	To check any other address, go to  **Accounts** → **Address Book**, add the address, and view its balance
 
 ### CLI
 
 ```bash
-every wallet balance
+every balance 0xD6f31D659F2aC7E72De23423f97874a13ec8D74F --network devnet
 ```
+With your wallet set up and funded, you’re ready to interact with Every Protocol.

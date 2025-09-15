@@ -22,9 +22,9 @@ export const sidebar: Sidebar = [
     text: "Guides",
     items: [
       { text: "Set up Wallets", link: "/docs/guides/set-up-wallets" },
-      { text: "Create a Set", link: "/docs/guides/create-a-set" },
-      { text: "Define a Kind", link: "/docs/guides/define-a-kind" },
       { text: "Register a Matter", link: "/docs/guides/register-a-matter" },
+      { text: "Create a Set", link: "/docs/guides/create-a-set" },
+      { text: "Create a Kind", link: "/docs/guides/create-a-kind" },
     ],
   },
 
@@ -35,11 +35,11 @@ export const sidebar: Sidebar = [
         text: "Core",
         collapsed: false,
         items: [
-          { text: "Set Registry", link: "/docs/contracts/core/SetRegistry" },
-          { text: "Omni Registry", link: "/docs/contracts/core/OmniRegistry" },
-          { text: "Kind Registry", link: "/docs/contracts/core/KindRegistry" },
-          { text: "Element Registry", link: "/docs/contracts/core/ElementRegistry" },
-          { text: "Object Minter", link: "/docs/contracts/core/ObjectMinter" },
+          { text: "SetRegistry", link: "/docs/contracts/core/SetRegistry" },
+          { text: "OmniRegistry", link: "/docs/contracts/core/OmniRegistry" },
+          { text: "KindRegistry", link: "/docs/contracts/core/KindRegistry" },
+          { text: "ElementRegistry", link: "/docs/contracts/core/ElementRegistry" },
+          { text: "ObjectMinter", link: "/docs/contracts/core/ObjectMinter" },
         ],
       },
       {
@@ -52,6 +52,7 @@ export const sidebar: Sidebar = [
           { text: "IObjectMinterHook", link: "/docs/contracts/periphery/IObjectMinterHook" },
         ],
       },
+      { text: "Addresses", link: "/docs/contracts/addresses" },
     ],
   },
 
@@ -65,8 +66,8 @@ export const sidebar: Sidebar = [
       { text: "Smart Contracts", link: "/docs/network/contracts" },
       { text: "OVM", link: "/docs/network/ovm" },
       { text: "Tokenomics", link: "/docs/network/tokenomics" },
-      { text: "Nodes", link: "/docs/network/nodes" },
-      { text: "Deployment", link: "/docs/network/deployment" },
+      { text: "Participants", link: "/docs/network/participants" },
+      { text: "Endpoints", link: "/docs/network/endpoints" },
     ],
   },
   {

@@ -4,7 +4,7 @@ import { sidebar } from "./docs/sidebar";
 export default defineConfig({
   theme: {
     accentColor: {
-      light: "#00FFFF",
+      light: "#39aaaa",
       dark: "#00FFFF",
     },
   },
@@ -13,7 +13,7 @@ export default defineConfig({
   iconUrl: "/every-favicon.svg",
   banner: "Head to our new [Discord](https://discord.gg/JUrRkGweXV)!",
   font: {
-    google: "Lexend",
+    google: "Lexend Deca",
   },
   sidebar,
   topNav: [
@@ -23,6 +23,7 @@ export default defineConfig({
     { text: "Network", link: "/docs/network/overview", match: "/docs/network" },
     {
       text: "Builders",
+
       items: [
         {
           text: "Developer Portal",
@@ -40,6 +41,16 @@ export default defineConfig({
           text: "Status Page",
           link: "https://status.every.fun",
         },
+        {
+          text: "Contract Addresses",
+          link: "/docs/contracts/addresses",
+          match: "__undefined__",
+        },
+        {
+          text: "Network Endpoints",
+          link: "/docs/network/endpoints",
+          match: "__undefined__",
+        },
       ],
     },
     {
@@ -55,11 +66,11 @@ export default defineConfig({
         },
         {
           text: "kasc",
-          link: "https://github.com/wevm/vocs/blob/main/.github/CONTRIBUTING.md",
+          link: "/docs/reference/kasc",
         },
         {
           text: "every",
-          link: "https://github.com/wevm/vocs/blob/main/.github/CONTRIBUTING.md",
+          link: "/docs/reference/every-cli",
         },
         {
           text: "Core Contracts",

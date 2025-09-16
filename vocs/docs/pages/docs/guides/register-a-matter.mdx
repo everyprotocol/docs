@@ -11,40 +11,41 @@ This guide walks you through the process of registering a matter on the Every Ne
 Make sure you have:
 
 1. Learned the [concepts of matters](/docs/concepts/elements#matter)
-2. Set up a wallet and funded it with testnet tokens (see [Set Up Wallets](/docs/guides/set-up-wallets))
+2. A [wallet set up](/docs/guides/set-up-wallets) and funded with tokens
 
-## Understanding Matters
-
-A **matter** is an asset — such as an image, file, 3D model, or any raw content — that can be used programmatically to construct objects in Every Protocol.
-
-In this guide, we’ll use a PNG file as an example. You can [download the sample file]() or use one of your own.
-
-## Registering a Matter
+## Register a Matter
 
 To register a matter using the CLI:
 
 ```bash
-every matter register ./path/to/file.png -a eve -u base-sepolia
+every matter register image.png --account eve --network devent
+```
+Sample output:
+
+```bash
+Register matter: form=1 mime=image/png blob=34635B image.png
+Transaction submitting...
+Transaction submitted: 0xc1ec3dd77823729c189c30c5b08a54b5e8baf3a7c6da7c80ab9d44245bd8c7cb
+Transaction mining...
+Transaction confirmed: 0xc1ec3dd77823729c189c30c5b08a54b5e8baf3a7c6da7c80ab9d44245bd8c7cb block=20320 image.png
+Withdraw           ['5C4hrfjw9DjXZTzV3P67xPWpaav1Hy9AQDLks7qocYHLAe73',595919749]
+MatterRegistered   ['5C4hrfjw9DjXZTzV3P67xPWpaav1Hy9AQDLks7qocYHLAe73','0x414dc89b6efd259a6f08b900f689649427f4932f04f1c7f0475f381f87544a96']
+TransactionFeePaid ['5C4hrfjw9DjXZTzV3P67xPWpaav1Hy9AQDLks7qocYHLAe73',595919749,0]
+ExtrinsicSuccess   [{weight:{refTime:595885000,proofSize:12184},class:'Normal',paysFee:'Yes'}]
 ```
 
-This command will:
--	Determine the MIME type and form of the matter from the file extension (you can also specify them manually)
-- Determine the target network using the -u option
-- Use the keystore specified by the -a option to sign and submit the transaction
-- Wait for the transaction to be finalized and print the emitted events
+## Access the Matter
 
-## Accessing the Matter
+Once registered, a matter can be retrieved through Every Network gateways using its hash.
 
-Once registered, matters can be accessed via Every Network gateways using their hash. For example, if the matter you registered has the hash 0x3456, it can be viewed at:
+For example, the matter we just registered has the hash:
 
-- [https://every.im/matter/0x3456](https://every.im/matter/0x3456)
+`0x414dc89b6efd259a6f08b900f689649427f4932f04f1c7f0475f381f87544a96`
 
-Gateways can be run by any network participant. Every Labs maintains the following gateways:
+It can be accessed at:
 
-| Gateway  | Network |
-| -------- | ------- |
-| every.bz | Devnet  |
-| every.im | Testnet |
-| every.fm | Mainnet |
+- [https://every.bz/matter/0x414dc89b6efd259a6f08b900f689649427f4932f04f1c7f0475f381f87544a96](https://every.bz/matter/0x414dc89b6efd259a6f08b900f689649427f4932f04f1c7f0475f381f87544a96)
+
+Here, `https://every.bz` is the public gateway for the devnet operated by Every Labs. See [Network Endpoints](/docs/network/endpoints) for more details.
 
 Matters are foundational to the protocol, and in the following chapters you’ll see how they are used in sets, kinds, and more.

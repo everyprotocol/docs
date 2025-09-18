@@ -4,112 +4,178 @@ title: "Create a Kind"
 
 # Create a Kind
 
-This guide walks you through defining a custom kind contract in Every Protocol.
+This guide walks you through writing a kind contract and registering it in the **Kind Registry**.
 
-In this example, we'll build a simple kind called `Dice`, where each object has two elements: a `face value` and a `background color`. The kind will define two asset functions: `meta()` and `picture()`.
+In this example, we'll build a kind contract for dice. Each dice object is modeled with a single element:
 
-## Goal
+- `face`: the number of dots representing its current value
 
-Objects of this kind will have:
+The kind contract will implement two asset functions:
 
-* `face`: the value shown on the die (1–6)
-* `bg`: the background color
-
-The kind will define two asset functions:
-
-* `meta()`: returns metadata such as name and description
-* `picture()`: generates an image of the dice
+- `meta()`: returns metadata in JSON format that describes the object token
+- `picture()`: generates an image of the dice
 
 ## Before You Begin
 
+Make sure you have:
+
+1. **Bun** installed (for scaffolding a project from the template repository)
+2. A [wallet set up](/docs/guides/set-up-wallets) and funded with tokens
+
 ## Write the Kind Contract
 
-### 1. Intialize a project
+### 1. Initialize a project
 
-Use the `bun create` command to scaffold your project:
+Scaffold a kind contract project from the template:
 
 ```bash
-bun create everytemplate/kind dice
+bun create everytemplate/kind dice-kind
 ```
 
-This sets up a new project with starter code in a folder called `dice`.
+Build the project to verify it compiles:
+
+```bash
+cd dice-kind
+bun run build
+```
 
 ### 2. Implement contract logic
 
-Open `dice/index.ts` and implement the logic for `meta()` and `picture()` using the elements `face` and `bg`.
-
-Example:
+Edit `assembly/index.ts` to implement the asset functions. The final code looks like this (see [dice-kind](https://github.com/everytemplate/dice-kind) for the full repo):
 
 ```ts
 @kind
 class Dice {
-  face!: u8;
-  bg!: Bytes32;
+  face!: Bytes32;
 
   meta(): Json {
     let data = json.create("{}");
-    json.setString(data, "/name", `Dice #${object.id}`);
-    json.setString(data, "/description", "A six-sided die created using the Dice kind.");
+    json.setString(data, "/name", `Dice #${object.id()}`);
+    json.setString(data, "/description", "A dice");
+    json.setString(data, "/image", object.assetUri2("picture"));
     return data;
   }
 
   picture(): Image {
-    let canvas = image.fill(this.bg, 800, 800);
-    return image.drawText(canvas, `${this.face}`, 360, 400);
+    let canvas = image.create(800, 800, 2);
+    const COLOR_WHITE = new PixelRgb8(255, 255, 255);
+    const COLOR_BLACK = new PixelRgb8(0, 0, 0);
+    const COLOR_RED = new PixelRgb8(255, 0, 0);
+
+    image.drawFilledRectMut(canvas, new Rect(0, 0, 800, 800), COLOR_WHITE);
+    image.drawHollowRectMut(canvas, new Rect(50, 50, 700, 700), COLOR_BLACK);
+
+    let dots = (this.face.extractU8(31) % 6) + 1;
+    switch (dots) {
+      case 1:
+        image.drawFilledCircleMut(canvas, new PointI32(400, 400), 50, COLOR_RED);
+        break;
+      case 2:
+        image.drawFilledCircleMut(canvas, new PointI32(200, 200), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(600, 600), 50, COLOR_BLACK);
+        break;
+      case 3:
+        image.drawFilledCircleMut(canvas, new PointI32(200, 200), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(400, 400), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(600, 600), 50, COLOR_BLACK);
+        break;
+      case 4:
+        image.drawFilledCircleMut(canvas, new PointI32(200, 200), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(600, 200), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(200, 600), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(600, 600), 50, COLOR_BLACK);
+        break;
+      case 5:
+        image.drawFilledCircleMut(canvas, new PointI32(200, 200), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(600, 200), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(400, 400), 50, COLOR_RED);
+        image.drawFilledCircleMut(canvas, new PointI32(200, 600), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(600, 600), 50, COLOR_BLACK);
+        break;
+      case 6:
+        image.drawFilledCircleMut(canvas, new PointI32(200, 200), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(200, 400), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(200, 600), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(600, 200), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(600, 400), 50, COLOR_BLACK);
+        image.drawFilledCircleMut(canvas, new PointI32(600, 600), 50, COLOR_BLACK);
+        break;
+    }
+    return canvas;
   }
 }
 ```
 
-### 3. Inspect the kind contract
+Now build the contract. If successful, you will find `index.wasm` in the `build` directory:
 
 ```bash
-cd dice
 bun run build
 ```
 
-This compiles the `Dice` kind contract to WebAssembly.
+### 3. Meet kind-as and OVM
 
-To inspect the output binary:
+This code is written in [AssemblyScript](/docs/misc/resources#assemblyscript) and can be compiled with `kind-as`.
+- See [kind-as](https://kindas.every.fun) for the API reference.
+- See [kasc](/docs/reference/kasc) for the CLI reference.
 
-```bash
-wasm-objdump -h build/index.wasm
-```
-
-Look for custom sections like `kindcomp`, `kindelms`, and `kindfcts`.
-
-You can view section content using:
-
-```bash
-wasm-custom-section build/index.wasm show kindcomp
-```
+The code interprets the face value as the number of dots and draws them by calling image functions.
+The resulting contract is executed on the [OVM](/docs/network/ovm) (Object Virtual Machine) of the Every chain, which provides host functions for generating JSON and image assets verifiably.
 
 ## Register the Kind
 
-### 1. Register the kind wasm as a matter
+### 1. Register the code (as matter)
+
+Register the wasm file as a matter:
 
 ```bash
-every matter register build/index.wasm
+every matter register build/index.wasm --account eve --network devnet
 ```
 
-This returns a `matterId`, which will be used in the next step.
-
-### 2. Register the kind
+You’ll see output including the matter hash:
 
 ```bash
-every kind register <codeHash> <dataHash> '[1, 2]' '[]'
+Register matter: form=1 mime=application/wasm blob=6876B build/index.wasm
+Transaction submitted: 0xed68e949abedf05768384b912b01dee2198612e35b1215709903cd53173c2cde
+MatterRegistered   ['...','0x1dea6f244d8636df267f8589beb433407d12b05b82432a83419254ad2754daa9']
+```
+
+### 2. Register the data (as matter)
+
+Create a data file shared by all objects of this kind. For now, use an empty JSON file:
+
+```bash
+echo '{}' > data.json
+```
+
+Register it as matter:
+
+```bash
+every matter register data.json --account eve --network devnet
+```
+
+You’ll see output including its matter hash:
+
+```bash
+Register matter: form=1 mime=application/json blob=3B data.json
+MatterRegistered   ['...','0x56c792cfe063dde75e9e6afb371542ea141c62c342820ce9b0394992c7f40d35']
+```
+
+### 3. Register the kind
+
+With both code and data registered, register the kind:
+
+```bash
+every kind register \
+  0x1dea6f244d8636df267f8589beb433407d12b05b82432a83419254ad2754daa9 \
+  0x56c792cfe063dde75e9e6afb371542ea141c62c342820ce9b0394992c7f40d35 \
+  '[1]' \
+  '[]' \
+  --foundry --account eve --universe sepolia
 ```
 
 Arguments:
 
-* `<codeHash>`: the hash of your wasm file (from matter registration)
-* `<dataHash>`: metadata for the kind (can be empty or a JSON blob)
-* `'[1, 2]'`: specifies the element types (1 = value, 2 = unique, etc.)
-* `'[]'`: list of supported relation IDs (can be empty)
-
-Run `every kind register -h` to see all available options:
-
-```bash
-every kind register -h
-```
-
-You’ve now defined and registered a kind contract. In the next guide, we’ll show how to create a set that uses this kind, and mint objects from it.
+- `<code>`: matter hash of the contract code
+- `<data>`: matter hash of the shared data
+- `'[1]'`: element types array
+- `'[]'`: supported relation IDs (empty for now)

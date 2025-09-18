@@ -4,31 +4,34 @@ title: "Create a Set"
 
 # Create a Set
 
-A **set** is the contract from which object tokens are minted in Every Protocol.
-It is a token contract that conforms to the Object Token standard and must be registered in the Set Registry.
+This walkthrough covers writing a set contract, registering it in the **Set Registry**, and minting objects from the set.
 
-- Each set is assigned a unique **set ID** when registered.
-- Each object minted from a set must specify a **kind** and its **elements**, emitted as events defined by the Object Token standard.
-- The full logic is implemented as a contract deployed on a **universe chain**, called the **set contract**.
+In this guide, you’ll implement a dice contract. The contract exposes two key methods:
 
-This guide demonstrates how to write a set contract, register it in the Set Registry, and mint objects from it.
+- `mint()`: mint a new dice
+- `roll()`: roll the dice to a new face value
+
+The set is built on top of an existing kind (which could be developed by you, others, or even an AI).
 
 ## Before You Begin
 
 Make sure you have:
 
-1. A kind already created (see [Create a Kind](/docs/guides/create-a-kind))
+1. A dice kind already created (see [Create a Kind](/docs/guides/create-a-kind))
 2. A [wallet set up](/docs/guides/set-up-wallets) and funded with tokens
+3. [Foundry](/docs/misc/resources#foundry) installed (for scaffolding and deploying contracts)
 
 ## Write a Set Contract
 
 ### 1. Initialize a project
 
-Initialize a new set contract project from the template:
+Start a new set contract project from the template:
 
 ```bash
 forge init --template everytemplate/set dice-set
 ```
+
+Build to confirm it compiles:
 
 ```bash
 cd dice-set
@@ -37,61 +40,232 @@ forge build
 
 ### 2. Implement contract logic
 
-Edit the contract in src/ to define your set’s logic and behavior.
-For this example we’ll use DiceSet.sol.
+Edit `src/DiceSet.sol`. A complete example is available in the
+[dice-set](https://github.com/everytemplate/dice-set) repository.
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+
+import {ObjectIdAuto} from "@everyprotocol/periphery/libraries/Allocator.sol";
+import {ISetRegistry, SetRegistryAdmin} from "@everyprotocol/periphery/utils/SetRegistryAdmin.sol";
+import {ISetRegistryHook, SetContext, SetRegistryHook} from "@everyprotocol/periphery/utils/SetRegistryHook.sol";
+import {Descriptor, ISet, SetSolo} from "@everyprotocol/periphery/utils/SetSolo.sol";
+
+contract DiceSet is SetSolo, SetRegistryHook, SetRegistryAdmin {
+    using ObjectIdAuto for ObjectIdAuto.Storage;
+
+    error KindNotSpecified();
+    error SetNotAssigned();
+
+    ObjectIdAuto.Storage internal _idManager;
+
+    constructor(address setRegistry, uint64 kindId, uint32 kindRev) SetRegistryHook(setRegistry) {
+        if (kindRev == 0 || kindId == 0) revert KindNotSpecified();
+        SetContext.setKindId(kindId);
+        SetContext.setKindRev(kindRev);
+    }
+
+    function mint(address to, uint64 id0) external returns (uint64 id, Descriptor memory desc) {
+        (uint64 setId, uint32 setRev) = (SetContext.getSetId(), SetContext.getSetRev());
+        if (setId == 0 || setRev == 0) revert SetNotAssigned();
+        (uint64 kindId, uint32 kindRev) = (SetContext.getKindId(), SetContext.getKindRev());
+        if (kindId == 0 || kindRev == 0) revert KindNotSpecified();
+
+        desc = Descriptor({
+            traits: 0,
+            rev: 1,
+            setRev: setRev,
+            kindRev: kindRev,
+            kindId: kindId,
+            setId: setId
+        });
+
+        id = _idManager.allocate(id0);
+        bytes32 ;
+        elems[0] = _roll();
+
+        _create(to, id, desc, elems);
+        _postCreate(to, id, desc, elems);
+    }
+
+    function roll(uint64 id, uint256 face) external returns (Descriptor memory od) {
+        bytes32 ;
+        elems[0] = bytes32(face);
+        od = _update(id, elems);
+        _postUpdate(id, od, elems);
+    }
+
+    function roll(uint64 id) external returns (Descriptor memory od) {
+        bytes32 ;
+        elems[0] = _roll();
+        od = _update(id, elems);
+        _postUpdate(id, od, elems);
+    }
+
+    function _roll() internal view returns (bytes32) {
+        return keccak256(abi.encodePacked(block.prevrandao, tx.origin, gasleft()));
+    }
+
+    function supportsInterface(bytes4 interfaceId) external pure override(SetSolo, SetRegistryHook) returns (bool) {
+        return interfaceId == type(ISetRegistryHook).interfaceId || SetSolo._supportsInterface(interfaceId);
+    }
+
+    function _objectURI() internal view virtual override returns (string memory) {
+        ISetRegistry setr = ISetRegistry(SetContext.getSetRegistry());
+        return setr.setURI(SetContext.getSetId());
+    }
+}
+```
+
+Build the contract:
+
+```bash
+forge build
+```
 
 ## Register the Set
 
-### 1. Deploy the contract
+### 1. Check the configuration
+
+Ensure the Every CLI is configured for Sepolia:
+
+```bash
+every config show | jq .universes.sepolia
+```
+
+Example output:
+
+```json
+{
+  "id": 31337,
+  "rpc": "http://127.0.0.1:8545",
+  "explorer": "http://127.0.0.1:8545",
+  "observer": "dev",
+  "contracts": {
+    "SetRegistry": "0x854C35Fd2b65fE9fcE71dddE91De8c3e1A7Dc8Ae",
+    "OmniRegistry": "0x4b7fc108F2c4fCDD990240448D2eED8034713c7D",
+    "KindRegistry": "0x7A8B3E5A9c227858C5917b7de8ba1684Cd868630",
+    "ElementRegistry": "0x8De1EE1dbAE2Ffd1CAe1e6bA83E6cAede1461507",
+    "ObjectMinter": "0x12CaBC370b316F247126F3Fab529Ee25e03aE226"
+  }
+}
+```
+The Every CLI ships with several default configs. If none are found, you can add a .every.toml file either in the current directory or in your home directory.
+
+
+Use the command below to see all configuration files that the CLI checks:
+```bash
+every config files
+```
+
+Check the first file in the list as a reference for your own configuration.
+You don’t need to copy the entire contents — configs are merged automatically, and values from later files override earlier ones.
+
+### 2. Deploy the contract
+
+Deploy using Foundry. Replace `--rpc-url` and the first constructor argument with values from the config:
+
 ```bash
 forge create src/DiceSet.sol:DiceSet \
-  --rpc-url http://anvil.localhost \
-  --account charlie \
+  --rpc-url http://127.0.0.1:8545 \
+  --account eve \
   --constructor-args 0x854C35Fd2b65fE9fcE71dddE91De8c3e1A7Dc8Ae 17 1
 ```
 
-### 2. Register it in the Set Registry
+### 3. Register the data (as matter)
 
-Once deployed, register the set contract in the Set Registry:
+Create a shared data file:
+
+```bash
+echo '{}' > data.json
+```
+
+Register it:
+
+```bash
+every matter register data.json --account eve --network devnet
+```
+
+Output includes its hash:
+
+```bash
+Register matter: form=1 mime=application/json blob=3B data.json
+MatterRegistered   ['...','0x56c792cfe063dde75e9e6afb371542ea141c62c342820ce9b0394992c7f40d35']
+```
+
+### 4. Register the set
+
+Register the deployed set:
 
 ```bash
 every set register \
   0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82 \
-  0x7aac8eb4c87ba294324476e11b6bc12787951c4e20a0b4a9966377a1c8381674 \
-  --foundry --account charlie --universe anvil
+  0x56c792cfe063dde75e9e6afb371542ea141c62c342820ce9b0394992c7f40d35 \
+  --foundry --account eve --universe sepolia
 ```
-The first argument is the set contract address
-	•	The second is the kind hash
-	•	--foundry tells the CLI to use Foundry’s keystore
-	•	--universe specifies the target chain
 
-## Work with Objects
+Arguments:
+- `<code>`: address of the set contract
+- `<data>`: matter hash of the shared data
+
+Sample output:
+
+```bash
+Set registered with ID 17
+```
+
+## Interact with Objects
 
 ### 1. Mint objects
 
-With the set registered, you can mint new objects from it.
+Mint from the set:
 
-First, encode the element values:
 ```bash
-cast abi-encode 'fn(bytes32[])' \
-  '[0xffaaeb0dc1385d1d515c5cc2f2da4a370f644fc75796913a066782e833b19aa8,0xffaaeb0dc1385d1d515c5cc2f2da4a370f644fc75796913a066782e833b19aa8]'
+every object send --sig 'mint(address, uint64)' \
+    0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 17.0 \
+    --foundry --account eve --universe sepolia
 ```
 
-### 2. Update objects
+### 2. View objects
 
-Then call the create function on the set contract:
+Object assets can be accessed via Every Network gateways.
+Each asset is called a *facet asset*, referenced by its facet selector (similar to Ethereum function selectors).
+
+Example:
+
 ```bash
-cast send \
-  --rpc-url http://anvil.localhost \
-  --account alice \
-  0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82 \
-  'create(address,uint64,bytes calldata)' \
-  0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 \
-  0 \
-  0x0000000000000000000000000000000000000000000000000000000000000020\
-0000000000000000000000000000000000000000000000000000000000000002ffaa\
-eb0dc1385d1d515c5cc2f2da4a370f644fc75796913a066782e833b19aa8ffaaeb0d\
-c1385d1d515c5cc2f2da4a370f644fc75796913a066782e833b19aa8
+cast keccak "meta" | cut -c1-10
+# 0x0144b03a
+
+cast keccak "meta" | cut -c1-10 | cast to-dec
+# 21278778
 ```
 
-### 3. Access object assets
+| facet   | selector   | asset URL                                      |
+|---------|------------|------------------------------------------------|
+| meta    | 0x0144b03a | `https://every.bz/object/{oid}/{rev}/{facet}`  |
+| picture | 0xeb0568a6 | `https://every.bz/object/{oid}/{rev}/{facet}`  |
+
+
+### 3. Update objects
+
+Update an existing object by rolling it to a new face value:
+
+```bash
+every object send --sig 'roll(uint64)' \
+  17.1 \
+  --foundry --account eve --universe sepolia
+```
+Output:
+
+```
+```
+
+The object now has a new revision, and you can inspect its updated facet assets:
+
+
+| facet   | selector   | asset URL                                      |
+|---------|------------|------------------------------------------------|
+| meta    | 0x0144b03a | `https://every.bz/object/{oid}/{rev}/{facet}`  |
+| picture | 0xeb0568a6 | `https://every.bz/object/{oid}/{rev}/{facet}`  |

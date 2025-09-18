@@ -10,23 +10,35 @@ To interact with Every Protocol, you’ll need a wallet to sign transactions on 
 
 Every Network supports [unified accounts](/docs/network/accounts), allowing you to use the same address and private key across both types of chains.
 
-This guide walks you through setting up a wallet using either a browser extension or the Every CLI.
+You can set up a wallet in any one of the following ways — choose whichever works best for you.
 
-## Use Wallet Extensions
+## Option 1: Wallet Extensions
 
 The easiest way to get started is with a browser wallet extension. We recommend:
 
 - [SubWallet](https://subwallet.app)
 - [Talisman](https://talisman.xyz)
 
-These support both **Substrate accounts** and **Ethereum accounts**. With them, you can:
+Both support **Substrate accounts** and **Ethereum accounts**. With them, you can:
 
 - Create a new wallet from scratch
 - Import an existing wallet with a seed phrase or private key
 
-## Use the CLI
+## Option 2: cast CLI
 
-You can also generate or import a wallet from the terminal using the `every` CLI.
+You can use **cast** to create or import wallets. See the [cast wallet reference](https://getfoundry.sh/cast/reference/wallet/) for details.
+
+The Every CLI works seamlessly with Foundry keystores (`~/.foundry/keystores`).
+
+- By default, `every` uses its own keystores (`~/.every/keystores`) and you specify accounts with `--account NAME` or `-a NAME`.
+- To use Foundry keystores instead, add `--foundry` (or `-f`).
+- Combine for convenience with `-fa NAME`.
+
+If you’re deploying sets on Ethereum chains, using Foundry keystores lets you use both `foundry` and `every` commands smoothly without managing separate keys.
+
+## Option 3: every CLI
+
+You can also generate or import wallets directly with the `every` CLI.
 If you don’t have it installed yet, run:
 
 :::code-group
@@ -40,7 +52,7 @@ npm i -g @everyprotocol/every-cli
 
 ### Generate a new wallet
 
-In the examples below we use eve as the wallet name — feel free to choose your own.
+In the examples below we use `eve` as the wallet name — feel free to pick your own.
 
 ```bash
 every wallet new eve -t ethereum
@@ -83,13 +95,16 @@ You can check balances either via the Developer Portal or the CLI.
 
 ### Developer Portal
 
-1.	Open the [Developer Portal](https://portal.every.fun)
-2.	Go to **Accounts** → **Accounts** to view balances for all accounts injected by your wallet
-3.	To check any other address, go to  **Accounts** → **Address Book**, add the address, and view its balance
+1. Open the [Developer Portal](https://portal.every.fun)
+2. Go to **Accounts → Accounts** to view balances for accounts injected by your wallet
+3. To check another address, go to **Accounts → Address Book**, add the address, and view its balance
 
 ### CLI
+
+Run
 
 ```bash
 every balance 0xD6f31D659F2aC7E72De23423f97874a13ec8D74F --network devnet
 ```
+
 With your wallet set up and funded, you’re ready to interact with Every Protocol.

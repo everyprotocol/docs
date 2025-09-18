@@ -173,9 +173,21 @@ every kind register \
   --foundry --account eve --universe sepolia
 ```
 
-Arguments:
+The four arguments are:
 
 - `<code>`: matter hash of the contract code
 - `<data>`: matter hash of the shared data
 - `'[1]'`: element types array
 - `'[]'`: supported relation IDs (empty for now)
+
+Sample output:
+
+```bash
+Transaction sending...
+Transaction sent: 0xd91f6effaee287da8f593461fe30e3fa121ae031f455b9e309bb3346d5017216
+Waiting for confirmation...
+Confirmed in: block 52991, hash 0xdf7addfd547e0360226188362e12252109958cd2677d024e691caa9e583291fe
+KindRegistered {id:17n,desc:{traits:0,rev:1,kindRev:1,setRev:1,kindId:2n,setId:2n},code:'0x1dea6f244d8636df267f8589beb433407d12b05b82432a83419254ad2754daa9',data:'0x56c792cfe063dde75e9e6afb371542ea141c62c342820ce9b0394992c7f40d35',elemSpec:[1],rels:[],owner:'0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'}
+```
+
+The `KindRegistered` event confirms that the kind has been successfully registered. In this example, the kind was assigned an ID of 17.

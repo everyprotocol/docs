@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --logo-url: url("/every-combo-light.svg");
+  --logo-url: url("/every-symbol-light.svg");
 }
 :root.dark {
-  --logo-url: url("/every-combo-dark.svg");
+  --logo-url: url("/every-symbol-dark.svg");
 }
 
 .logo {

@@ -13,16 +13,43 @@ import { CheckCircleIcon, ShieldCheckIcon, RocketLaunchIcon } from "@heroicons/r
 
 <div className="flex flex-col gap-8 mx-auto max-w-5xl px-4 md:px-6 lg:px-8 py-16 items-center">
 <div className="logo"/>
-<HomePage.Tagline>A new paradigm of co-creation — with humans, AIs, and their networks</HomePage.Tagline>
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div className="flex flex-col gap-4">
-    <HomePage.Description>From trading floors to social feeds, NFTs are still about collecting. Most human creativity remains off-chain, while AI is already creating. Every empowers all creators — human or AI — create and collaborate onchain.</HomePage.Description>
+<HomePage.Tagline>A new paradigm of co-creation</HomePage.Tagline>
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div className="flex flex-col px-4 max-w-lg gap-4 text-center lg:text-left">
+    <p>Most creation happens offchain and stays static and isolated when wrapped as a token.</p>
+    <p>Every brings human and AI creators into a onchain space where creations grow, interact, and build on one another.</p>
+    </div>    
+    <div className="flex flex-col max-w-lg gap-2">
+    :::code-group
+
+```bash [install]
+bun add -g @everyprotocol/every-cli
+npm install -g @everyprotocol/every-cli
+```
+
+```bash [register matters]
+every matter register image.png
+every matter register data.json
+```
+
+
+```bash [build kinds]
+bun create @everytemplate/kind my-kind
+bun run build
+```
+
+```bash [build sets]
+forge init -t everytemplate/set my-set
+forge build
+```
+:::
     </div>
-    <HomePage.InstallPackage name="vocs" type="init" />
+
 </div>
+
 <HomePage.Buttons>
     <HomePage.Button href="/getting-started" variant="accent">Get started</HomePage.Button>
-    <HomePage.Button href="https://github.com/wevm/vocs">GitHub</HomePage.Button>
+    <HomePage.Button href="https://github.com/everyprotocol">GitHub</HomePage.Button>
 </HomePage.Buttons>
 </div>
 
@@ -32,10 +59,10 @@ import { CheckCircleIcon, ShieldCheckIcon, RocketLaunchIcon } from "@heroicons/r
 
 ---
 
-NFTs are paving the path toward a future shaped by humans and AIs — not as opaque tokens, but as object tokens
+NFTs are not opaque anymore, they are objects
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-  <Feature title="Mutable" desc="AERC-721 and 1155 shaped NFTs around trading and collecting. Object Token introduces mutability and upgradability — unlocking richer, evolving use cases."/>
+  <Feature title="Mutable" desc="ERC-721 and 1155 shaped NFTs around trading and collecting. Object Token introduces mutability and upgradability — unlocking richer, evolving use cases."/>
   <Feature title="Interoperable" desc="Object Tokens define relations at the kind level, enabling them to interact — even if minted from contracts by different creators."/>
   <Feature title="Semantic" desc="With element-based state and kind-level logic, Object Tokens are programmable and secure — ready for a future shaped by humans and AIs."/>
 </div>

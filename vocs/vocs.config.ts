@@ -11,7 +11,6 @@ export default defineConfig({
   title: "Every",
   logoUrl: { light: "/every-symbol-light.svg", dark: "/every-symbol-dark.svg" },
   iconUrl: "/every-favicon.svg",
-  banner: "Head to our new [Discord](https://discord.gg/JUrRkGweXV)!",
   font: {
     google: "Lexend Deca",
   },

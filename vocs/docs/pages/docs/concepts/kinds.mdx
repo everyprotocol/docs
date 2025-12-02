@@ -1,82 +1,78 @@
-A Kind is a meta-object that defines the structure, appearance, and interactions of a type of objects.
+# Kinds
 
-## Kind Object
-### Metadata
+A **kind** is a meta-object that acts as the type definition for other objects.
 
-The metadata of a kind contains essential information about its type and versioning. Every kind is minted from the **Set of Kinds**, with a kind of the **Kind of Kind**.
+## Descriptor
 
-| Field     | Value                        | Description                                         |
-|-----------|------------------------------|-----------------------------------------------------|
-| `traits`  | `0`                          | Reserved flags                                      |
-| `rev`     | `1`                          | Current revision number (initially set to `1`)      |
-| `krev`    | `kindOfKind.metadata.rev`    | Revision of the Kind of Kind                        |
-| `srev`    | `setOfKind.metadata.rev`     | Revision of the Set of Kind                         |
-| `kind`    | `kindOfKind.id`              | ID of the Kind of Kind                              |
-| `set`     | `setOfKind.id`               | ID of the Set of Kind                               |
+Kinds are themselves objects: they have their own kind and are minted from a set. The **Kind of Kind** and the **Set of Kind** are genesis objects created during protocol initialization.
 
-### Elements
+A kind’s descriptor is initialized with the following values:
 
-Each kind has **6 elements**, defined by the **Kind of Kind**. These elements serve as the core structure for both object typing and asset computation.
+| Field   | Value        | Description                                                       |
+|---------|--------------|-------------------------------------------------------------------|
+| `flags` | `0`          | Reserved flags                                                    |
+| `rev`   | `1`          | Initially `1`, increments as the kind itself evolves              |
+| `krev`  | `latest`     | Revision of the Kind of Kind at creation (increments over time)   |
+| `srev`  | `latest`     | Revision of the Set of Kind at creation (increments over time)    |
+| `kind`  | `2`          | ID of the Kind of Kind                                            |
+| `set`   | `2`          | ID of the Set of Kind                                             |
 
-| Index | Element   | Type   | Mutable | Description                                               |
-|-------|-----------|--------|---------|-----------------------------------------------------------|
-| `0`   | `data`    | Matter | Yes     | Hash of a bundle with committed matters and infos         |
-| `1`   | `code`    | Matter | Yes     | Hash of the kind contract                                 |
-| `2`   | `skel`    | Info   | No      | Declares the element types for objects of this kind       |
-| `3`   | `rels[0]` | Info   | Yes     | Supported relations (part 1)                              |
-| `4`   | `rels[1]` | Info   | Yes     | Supported relations (part 2)                              |
+## Elements
+
+Each kind has **7 elements**, as defined in the **Kind of Kind** object's **eltys** field.
+
+| Index | Element    | Type   | Mutable | Description                                          |
+|-------|------------|--------|---------|------------------------------------------------------|
+| `0`   | `code`     | Matter | Yes     | Matter Hash of the kind contract                     |
+| `1`   | `data`     | Matter | Yes     | Matter Hash of the kind data                         |
+| `2`   | `eltys`    | Info   | No      | Declares the element types for objects of this kind  |
+| `3`   | `rels[0]`  | Info   | Yes     | Supported relations (part 1)                         |
+| `4`   | `rels[1]`  | Info   | Yes     | Supported relations (part 2)                         |
+| `5`   | `rels[2]`  | Info   | Yes     | Supported relations (part 3)                         |
+| `6`   | `rels[3]`  | Info   | Yes     | Supported relations (part 4)                         |
+
+We devote separate sections below to the **code** and **data** fields.
+
+The `eltys` field defines the element types for objects of this kind. Each type is a `uint8` (> 0). The field is stored as a **packed `uint8[]`**, right-padded with zeros.
+
+The **`rels[i]`** fields encode supported relations. Each is a **packed `uint64[]`** spread across 4 × `bytes32`, right-padded with zeros.
 
 ## Kind Contract
 
-A **Kind Contract** is a `Matter` written in code form. It defines how an object’s assets are computed from its elements — enabling programmable logic for rendering, validation, or transformation.
+The `code` field stores the matter hash of the kind contract compiled to Wasm.
 
-Kind contracts are currently written in **AssemblyScript**, compiled to WebAssembly using `kind-as`. A Rust-based compiler is planned for future support.
+Below is a simple example of a kind contract in AssemblyScript:
 
 ```ts
 @kind
 class Hat {
-  design: MatterImage;
-  background: MatterImage;
+  image: MatterImage;
+  bg: MatterImage;
 
   function meta(): Json {
-    // return metadata
+    // ...
   }
 
   function picture(): Image {
-    // image with background
-  }
-
-  function figure(): Image {
-    // image without background
+    // ...
   }
 }
 ```
 
-### Elements
+Kind contracts can be written currently in **AssemblyScript** and compiled to Wasm using the `kasc` CLI from [kind-as](https://kindas.every.fun/).
 
-The fields of the contract class define the **elements** of the object. These can be accessed during kind contract execution:
+A Rust toolkit is planned for future support.  
 
-```ts
-design: MatterImage;
-background: MatterImage;
-```
 
-### Facets
+## Kind Data
 
-The methods exposed by the kind contract are called **facet functions**. Each facet function defines how a specific object asset is computed:
+The `data` field stores a matter hash referencing a piece of data associated with the kind.
 
-```ts
-function picture(): Image {
-  // image with background
-}
-```
+This data is available to the kind’s own contract and may also be used by the kind contracts of objects that use this kind. We will explore more in later chapters.
 
-Each output is called a **facet image**, and it can be accessed using a **facet selector** — a unique identifier used to dispatch to the correct function.
 
 ## Kind Registry
 
-| Operation      | Description                                                   |
-|----------------|---------------------------------------------------------------|
-| `register_kind`| Registers a new kind into the registry.                       |
-| `update_kind`  | Updates the mutable elements of an existing kind.             |
-| `upgrade_kind` | Applies a new revision of kind or set to the kind object.     |
+When a kind is registered in the [Kind Registry](/docs/contracts/core/KindRegistry), it is assigned a **kind ID**.
+
+A kind is used by specifying its **kind ID** and **kind revision** in the object’s descriptor when the object is minted by the set contract.

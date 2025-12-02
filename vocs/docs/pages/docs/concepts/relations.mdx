@@ -1,64 +1,74 @@
-A relation defines possible interactions between different kinds of objects. objects supports all the interactions defined by their kinds by default, exceptly ristricted by specially.
+# Relations
 
-A relation is also an object.
+A **relation** is a meta-object that defines how different kinds of objects may interact.
 
-## Relation Object
+## Descriptor
 
-### Metadata
+Relations are themselves objects: they have their own kind and are minted from a set. The **Kind of Relation** and the **Set of Relation** are genesis objects created during protocol initialization.
 
-The metadata of a realtion object contains essential information about its type and versioning.
+A relation’s descriptor is initialized with the following values:
 
-| Field     | Description                              |
-|-----------|------------------------------------------|
-| `traits`   | Flags, 0 for now (reserved for future use)   |
-| `rev`     | Revision number, starting with 0, increased after     |
-| `krev`    | Revision of the Kind of Set              |
-| `srev`    | Revision of the Set of Set               |
-| `kind`    | The id of the kind object of this relation object |
-| `set`     | The id of the set object of this relation object |
+| Field   | Value   | Description                                                            |
+|---------|---------|------------------------------------------------------------------------|
+| `flags` | `0`     | Reserved flags                                                         |
+| `rev`   | `1`     | Initially `1`, increments as the relation itself evolves               |
+| `krev`  | `latest`| Revision of the Kind of Relation at creation (increments over time)    |
+| `srev`  | `latest`| Revision of the Set of Relation at creation (increments over time)     |
+| `kind`  | `3`     | ID of the Kind of Relation                                             |
+| `set`   | `3`     | ID of the Set of Relation                                              |
 
+## Elements
 
-### Elements
+Each relation has **7 elements**, as specified in the **Kind of Relation** object's `eltys` field.
 
-| Index | Element   | Mutable | Description                                              |
-|-------|-----------|---------|----------------------------------------------------------|
-| `0`   | `data`    | Yes     | Shared data for all objects minted from this set         |
-| `1`   | `code`    | Yes     | Address of the relation contract                         |
-| `2`   | `poss`    | No      | Address of the relation contract                         |
-| `3`   | `adjs[0]` | Yes     | Shared data for all objects minted from this set         |
-| `4`   | `adjs[1]` | Yes     | Shared data for all objects minted from this set         |
+| Index | Element    | Mutable | Description                                                 |
+|-------|------------|---------|-------------------------------------------------------------|
+| `0`   | `code`     | Yes     | Address of the relation contract (reserved for future use)  |
+| `1`   | `data`     | Yes     | Matter hash containing relation-specific data               |
+| `2`   | `rule`     | No      | Encoded rule defining how the relation behaves              |
+| `3`   | `adjs[0]`  | Yes     | Encoded adjacencies (part 1)                                |
+| `4`   | `adjs[1]`  | Yes     | Encoded adjacencies (part 2)                                |
+| `5`   | `adjs[2]`  | Yes     | Encoded adjacencies (part 3)                                |   
+| `6`   | `adjs[3]`  | Yes     | Encoded adjacencies (part 4)                                |  
 
-#### Possession
+## Adjacency
 
-The `possession` element defines the processing of the ownership of the departure objects when they are connected or disconnected from destination objects.
+An **adjacency** specifies which kinds of objects a relation admits, and how many of each kind may participate.
 
-#### Adjacency
+```solidity
+struct Adjacency {
+    uint16 degs;  // number of objects of this kind allowed
+    uint48 kind;  // the kind of objects
+}
+```
 
-Each `adj_spec_n` element is composed of two tuples: `(dep_kind, min, max)`, `(dep_kind, min, max)`.
+Each adjacency can be compactly encoded as a single `uint64`:
 
-- **dep_kind**: The kind ID of the departure object, a `uint64` integer.
-- **min**: The minimum number of objects that the destination object can accept, a `uint32` integer.
-- **max**: The maximum number of objects that the destination object can accept, a `uint32` integer.
+```solidity
+uint64 adj = (uint64(degs) << 48) | kind;
+```
 
-The last tuple `(dep_kind, min, max)` of the last `adj_spec_n` can be all zeros, indicating the end of the adjacency spec array.
+The `kind` field has two special meanings; all other values refer to a registered kind ID:
 
-Normal `dep_kind`s must be an integer in the range of [1, \(2^{64} - 2\)].
+- `0` — any kind not explicitly listed  
+- `0xFFFFFFFFFFFF` — `degs` applies to the **total** number of objects in the relation  
 
-A wildcard `dep_kind` has a value of `2^{32} - 1`, meaning any kind.
+Adjacencies are stored in a relation’s `adjs[i]` fields, ordered by ascending kind ID.
 
-The `(dep_kind, min, max)` tuples must be in increasing order. If a wildcard adjacency spec exists, it must be the last valid one.
+## Relation Data
 
-`min` and `max` can be any `uint32` integer in the range [0, \(2^{32} - 1\)], as long as `max >= min`.
-
-If `max` equals \(2^{32} - 1\), it means unlimited.
-
+The `data` field stores a matter hash referencing a piece of data associated with the relation.
 
 ## Omni Registry
 
-Set objects support the following operations:
+When a relation is registered in the [Omni Registry](/docs/contracts/core/OmniRegistry), it receives a **relation ID**.  
+Its ID and revision can be compactly encoded into a single `uint64`:
 
-| Operation          | Description                                              |
-|--------------------|----------------------------------------------------------|
-| `register_relation`| Registers a new set into the registry.                   |
-| `update_relation`  | Updates the mutable elements of an existing set.         |
-| `upgrade_relation` | Applies a new revision of kind or set to the set object. |
+```solidity
+uint64 compact = (uint64(rev) << 48) | id;
+```
+A relation is admitted by a kind if its compact ID appears in that kind’s `rels[i]` fields.
+
+:::note
+This works because, for all meta-objects, `id` ≤ 2⁴⁸ − 1 and `rev` ≤ 2¹⁶ − 1.
+:::

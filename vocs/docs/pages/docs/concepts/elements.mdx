@@ -1,70 +1,82 @@
-Elements are the actual components of an object. Each element can represent digital content used by the object, a token wrapped inside the object, or arbitrary data associated with the object.
+# Elements
 
-Elements fall into four categories:
+Elements are the basic units that compose an object. 
 
-- **Matter** — Digital content (e.g. media, code)
-- **Value** — Fungible tokens
-- **Unique** — Traditional non-fungible tokens (NFTs). Since objects themselves are NFTs, *Unique* refers to non-object NFTs.
-- **Info** — Arbitrary data
-
-All elements are encoded as 32-byte values when stored in token contracts.
-
-## Element Types
-
-### Matter
-
-Matter elements represent cryptographically committed content stored on the Every Network. Each object that includes a matter element references it by its hash.
-
-**Structure:**
-
-| Field      | Type        | Description                             |
-|------------|-------------|-----------------------------------------|
-| `form`     | `uint8`     | Format or encoding type                 |
-| `mime`     | `string31`  | MIME type (31-byte, zero-padded)       |
-| `content`  | `bytes`     | The actual media or content            |
-
-**Forms:**
-
-todo: list supported forms in a table
-
-**Hashing formula:**
-Only the hash is stored in the token contract. The actual content is stored on the Every Network and is loaded and processed by kind contracts to compute the object’s assets.
+There are four types: **matter**, **value**, **unique**, and **info**. All elements are stored as 32-byte values within set contracts, and some may reference additional digital content stored on the Every Network.
 
 
+## Matter
 
-### Value
+**Matter** represents digital content stored on the Every Network. It can be simple—such as images, JSON data, or WASM code—or complex, such as enumerations or permutations containing rows of elements.
 
-A value element represents an amount of fungible tokens wrapped by the object. The token must be registered in the **Element Registry** and referenced by its token index. The **set contract** is responsible for ensuring that the object is backed by the correct token balance.
+Each matter entry stores three fields:
 
-**Structure:**
+| Field   | Type        | Description                        |
+|---------|-------------|------------------------------------|
+| `form`  | `uint8`     | The matter type                    |
+| `mime`  | `string31`  | MIME type (31 bytes, right-padded) |
+| `blob`  | `bytes`     | The underlying digital content     |
 
-| Field       | Type        | Description                                      |
-|-------------|-------------|--------------------------------------------------|
-| `token`     | `uint64`    | Index of the registered token contract           |
-| `reserved`  | `uint64`    | Reserved (must be zero)                          |
-| `amount`    | `uint128`   | Amount of tokens wrapped (max: 2¹²⁸ − 1)         |
+A matter is referenced and committed by its **hash**, ensuring its content—and any structure derived from it—is cryptographically determined. The hash is computed as:
 
-**Note:** This differs from many token standards that use `uint256` for balances. However, `uint128` is sufficient for almost all practical use cases.
+```text
+SHA256(form ++ mime ++ blob)
+```
 
-### Unique
+## Value
 
-Unique elements represent non-fungible tokens wrapped by the object. Like value elements, they refer to a registered NFT contract and must be backed by the set contract.
+A **value** represents an amount of a fungible token wrapped inside an object.
 
-**Structure:**
+The underlying token must be registered in the **Element Registry**, and its associated matter entries must exist on the Every Network.
 
-| Field     | Type      | Description                                  |
-|-----------|-----------|----------------------------------------------|
-| `token`   | `uint64`  | Index of the registered NFT contract         |
-| `id`      | `uint64`  | Token ID of the NFT                          |
-| `amount`  | `uint128` | Quantity (must be `1` for ERC721-style NFTs) |
+A value element is stored as a `bytes32`-encoded tuple containing:
 
-### Info
+| Field    | Type      | Description                                   |
+|----------|-----------|-----------------------------------------------|
+| `token`  | `uint64`  | Index of the registered token                 |
+| `id`     | `uint64`  | Always `0` for fungible tokens                |
+| `amount` | `uint128` | Amount of tokens wrapped (max: 2¹²⁸ − 1)      |
 
-Info elements are arbitrary 32-byte data fields stored directly on the object.
+:::info
+The **set contract** is responsible for ensuring that the object is backed by the exact amount of the referenced token.
+:::
+
+:::info
+Amounts use `uint128` instead of `uint256`. While `uint128` is sufficient for most practical cases, tokens with very large decimal ranges could cause overflow.
+:::
+
+## Unique
+
+A **unique** represents an amount of OPT wrapped inside an object.
+
+The underlying token must be registered in the **Element Registry**, and its associated matter entries must exist on the Every Network.
+
+A unique element is stored as a `bytes32`-encoded tuple containing:
+
+| Field    | Type      | Description                                   |
+|----------|-----------|-----------------------------------------------|
+| `token`  | `uint64`  | Index of the registered token                 |
+| `id`     | `uint64`  | Token ID of the OPT                           |
+| `amount` | `uint128` | Amount of tokens wrapped (max: 2¹²⁸ − 1)      |
+
+:::info
+The **set contract** is responsible for ensuring that the object is backed by the exact amount of the referenced token.
+:::
+
+:::info
+Amounts use `uint128` instead of `uint256`. While `uint128` is sufficient for most practical cases, tokens with very large decimal ranges could cause overflow.
+:::
+
+## Info
+
+An **info** element is an arbitrary `bytes32` value. It is used to store small pieces of data directly within an object.
 
 
 ## Element Registry
 
-todo
+A **matter** element must be stored on the Every Network before it can be used to construct an object. Its matter hash can be pre-computed and referenced in the `Created` and `Updated` events emitted by a set contract.
 
-These fields can be read by set contracts on the universe chain and can also be interpreted or processed by kind contracts on the Every Network.
+**Info** elements have no associated digital content and require no registration; they may be referenced freely.
+
+**Value** and **unique** elements, however, must be registered in the [Element Registry](/docs/contracts/core/ElementRegistry) before use.  
+Once registered, a token index is assigned. When minting or updating an object, the set contract uses this token index to specify how much of the token or which instance is held by the object.

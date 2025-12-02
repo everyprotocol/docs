@@ -3,19 +3,16 @@ import { Sidebar } from "vocs";
 export const sidebar: Sidebar = [
   {
     text: "Introduction",
-    items: [
-      { text: "Overview", link: "/docs" },
-      { text: "Getting Started", link: "/docs/set-up-wallets" },
-    ],
+    items: [{ text: "Every", link: "/docs" }],
   },
   {
     text: "Concepts",
     items: [
       { text: "Objects", link: "/docs/concepts/objects" },
+      { text: "Elements", link: "/docs/concepts/elements" },
       { text: "Kinds", link: "/docs/concepts/kinds" },
       { text: "Sets", link: "/docs/concepts/sets" },
       { text: "Relations", link: "/docs/concepts/relations" },
-      { text: "Elements", link: "/docs/concepts/elements" },
     ],
   },
   {
@@ -23,8 +20,9 @@ export const sidebar: Sidebar = [
     items: [
       { text: "Set up Wallets", link: "/docs/guides/set-up-wallets" },
       { text: "Register a Matter", link: "/docs/guides/register-a-matter" },
-      { text: "Create a Set", link: "/docs/guides/create-a-set" },
-      { text: "Create a Kind", link: "/docs/guides/create-a-kind" },
+      { text: "Register a Set", link: "/docs/guides/register-a-set" },
+      { text: "Register a Kind", link: "/docs/guides/register-a-kind" },
+      { text: "Register a Relation", link: "/docs/guides/register-a-relation" },
     ],
   },
 
@@ -47,8 +45,8 @@ export const sidebar: Sidebar = [
         collapsed: false,
         items: [
           { text: "ISet", link: "/docs/contracts/periphery/ISet" },
-          { text: "IInteroperable", link: "/docs/contracts/periphery/IInteroperable" },
           { text: "ISetRegistryHook", link: "/docs/contracts/periphery/ISetRegistryHook" },
+          { text: "IObjectInteractionHook", link: "/docs/contracts/periphery/IObjectInteractionHook" },
           { text: "IObjectMinterHook", link: "/docs/contracts/periphery/IObjectMinterHook" },
         ],
       },
@@ -63,7 +61,7 @@ export const sidebar: Sidebar = [
       { text: "Accounts", link: "/docs/network/accounts" },
       { text: "Transactions", link: "/docs/network/transactions" },
       { text: "State", link: "/docs/network/state" },
-      { text: "Smart Contracts", link: "/docs/network/contracts" },
+      { text: "Contracts", link: "/docs/network/contracts" },
       { text: "OVM", link: "/docs/network/ovm" },
       { text: "Tokenomics", link: "/docs/network/tokenomics" },
       { text: "Participants", link: "/docs/network/participants" },

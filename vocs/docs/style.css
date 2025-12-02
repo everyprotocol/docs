@@ -24,4 +24,5 @@
 .feature.desc {
   color: var(--vocs-color_text4);
   font-weight: bolder;
+  font-style: italic;
 }

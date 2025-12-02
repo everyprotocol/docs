@@ -6,7 +6,7 @@ content:
 ---
 
 import { HomePage, Sponsors } from 'vocs/components'
-import Custom, {Hello, Feature} from '../components/Custom'
+import {Feature} from '../components/Custom'
 import "../style.css";
 import { CheckCircleIcon, ShieldCheckIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 
@@ -23,8 +23,8 @@ import { CheckCircleIcon, ShieldCheckIcon, RocketLaunchIcon } from "@heroicons/r
     :::code-group
 
 ```bash [install]
-bun add -g @everyprotocol/every-cli
-npm install -g @everyprotocol/every-cli
+bun a -g @everyprotocol/every-cli
+npm i -g @everyprotocol/every-cli
 ```
 
 ```bash [register matters]
@@ -48,7 +48,7 @@ forge build
 </div>
 
 <HomePage.Buttons>
-    <HomePage.Button href="/getting-started" variant="accent">Get started</HomePage.Button>
+    <HomePage.Button href="/docs" variant="accent">Get Started</HomePage.Button>
     <HomePage.Button href="https://github.com/everyprotocol">GitHub</HomePage.Button>
 </HomePage.Buttons>
 </div>
@@ -59,34 +59,34 @@ forge build
 
 ---
 
-NFTs are not opaque anymore, they are objects
+A token standard for onchain assets that evolve and connect.
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-  <Feature title="Mutable" desc="ERC-721 and 1155 shaped NFTs around trading and collecting. Object Token introduces mutability and upgradability — unlocking richer, evolving use cases."/>
-  <Feature title="Interoperable" desc="Object Tokens define relations at the kind level, enabling them to interact — even if minted from contracts by different creators."/>
-  <Feature title="Semantic" desc="With element-based state and kind-level logic, Object Tokens are programmable and secure — ready for a future shaped by humans and AIs."/>
+  <Feature title="Mutable" desc="Transferability shaped NFTs around trading and collecting. Object tokens add mutability — enabling tokens to evolve, upgrade and respond over time."/>
+  <Feature title="Interoperable" desc="Relations are defined at the kind level, not per object — making objects able to interact with others, even across different token contracts."/>
+  <Feature title="Semantic" desc="Instead of metadata URIs, kinds define what an object represents, its components and interactions — preparing tokens for a human- and AI-driven future."/>
 </div>
 
 # Every Protocol
 
-Every Protocol powers onchain co-creation — with composable objects, reusable logic, programmable revenue, and shared rewards
+A protocol that facilitates co-creation with object tokens.
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-  <Feature title="Co-creation made simple" desc="Every Protocol defines elements, kinds, sets, and relations — enabling creators, developers to build together. Every contribution is onchain and composable."/>
-  <Feature title="Build objects and connections" desc="Kind-level relations let objects interact — even across creators — enabling recreation, collaboration, and richer utility, making them more fun to build on."/>
-  <Feature title="Create, earn, get rewarded" desc="Every Protocol monetizes and rewards creation — with revenue for authors and shared incentives for those who evolve and expand what’s been made."/>
+  <Feature title="Shared Creation Primitives" desc="Objects are constructed from elements, minted from sets, defined by kinds. These primitives form an onchain type system for composable, cross-creator building."/>
+  <Feature title="A Social Network of Objects" desc="Creativity doesn’t stop at mint. Kind-level relations let objects interact, remix, build on one another, creating a dynamic network of utility and fun."/>
+  <Feature title="Programmable Value Attribution" desc="Creation becomes inherently rewarding: revenue and incentives are distributed automatically to authors, creators, and contributors based on programmable rules."/>
 </div>
 
 # Every Network
 
-A PoCC chain built to fuel attributable and verifiable co-creation on your favorite chains
+A blockchain that powers object tokens on your favorite chains.
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-  <Feature title="Layer E" desc="Layer 1 secures, layer 2 scales, layer E explains.
-  Every Network extends existing chains to make onchain creation delightful, attributable, and limitless."/>
-  <Feature title="Unified Accounts" desc="Users keep the same address and private key on chains their token contracts reside."/>
-  <Feature title="Object Virtual Machine" desc="OVM computes assets from an object’s state, validates which elements can be used, and facilitates contribution-based revenue sharing and rewarding."/>
-  <Feature title="Proof of Co-Creation" desc="Featuring PoCC, Every Network credits pre-mint contributions, traces post-mint evolutions, and secures transparent, verifiable value creation and flow."/>
+  <Feature title="Layer E" desc="Extends existing chains by observing object events and producing their assets deterministically and verifiably. L1 secures, L2 scales, LE explains."/>
+  <Feature title="Object Virtual Machine" desc="Computes object assets from their elements and connections, tracing contributors and allocating value. It’s where objects form and value is attributed."/>
+  <Feature title="Proof of Co-Creation" desc="Makes creation transparent: assets are deterministic and verifiable, contributions traceable, and value distributed automatically by preset rules."/>
+  <Feature title="Unified Accounts" desc="Supports unified accounts, letting users keep the same address and private key as on the chain where their objects originate."/>
+
 </div>
 
 
@@ -94,10 +94,13 @@ A PoCC chain built to fuel attributable and verifiable co-creation on your favor
 
 Join the Community
 
- - Ask for support in the [Telegram chat](https://t.me/foundry_support) or create an [issue on Github](https://github.com/foundry-rs/foundry/issues)
- - Join the 500+ developers by [contributing](https://github.com/foundry-rs/foundry/blob/master/CONTRIBUTING.md) to Foundry
-
+ - Follow us on [Farcaster](https://farcaster.xyz/everyprotocol) and [X](https://x.com/everyprotocol)
+ - Join the early builders and contribute on [GitHub](https://github.com/everyprotocol)
+ 
 # Sponsors
 
-<Sponsors/>
+We’re just getting started.
+
+If you’d like to support the protocol or collaborate, we’d be happy to [connect](https://t.me/briceyan).
+
 </article>

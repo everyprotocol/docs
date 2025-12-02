@@ -1,61 +1,107 @@
-Object Token is a novel token standard introduced by Every Protocol — often referred to simply as an object.
+# Objects
 
-It is designed to be structured, composable, and interactive, enabling tokens that can evolve, relate, and co-create across creators and chains.
+Objects, short for object tokens, are a new kind of NFT.
 
-## Storage
+Traditional NFTs rely on an external metadata URI, leaving their structure opaque onchain. Object tokens embed a compact descriptor—a small struct with their kind, set, and revision—making their identity directly visible onchain.
 
-The  [OpenZeppelin documentation](https://docs.openzeppelin.com/contracts/4.x/tokens) clearly distinguishes between tokens and token contracts:
-
->	Token contracts are smart contracts that manage token balances and operations, while tokens themselves are the digital assets represented by those balances.
-
-
-In contrast to existing standards like ERC-721 or ERC-1155, Object Tokens store structured and extensible data directly within token contracts. Beyond local state, properties related to interactions across objects and across contracts are maintained in a shared coordination layer called the Omni Registry.
-
-| Standard    | Token Contract Storage                                                  | Omni Registry Storage         |
-|-------------|-------------------------------------------------------------------------|-------------------------------|
-| **ERC20**   | `map(owner => balance)`                                                 | —                             |
-| **ERC721**  | `map(id => owner)`<br/>`map(id => uri)`                                 | —                             |
-| **ERC1155** | `map(owner => id => balance)`<br/>`map(id => uri)`                      | —                             |
-| **Objects** | `map(id => owner)`<br/>`map(id => metadata)`<br/>`map(id => elements)`  | `map(id => position)`         |
+For clarity, this documentation uses **OBTs** to denote object tokens and **OPTs** to denote traditional NFTs.
 
 ## Properties
 
-The table below outlines the key properties tracked by various token types. Object tokens extend this list with composable content, structured metadata, and spatial logic.
+The table below outlines the key properties tracked by token contracts of OPTs and OBTs.
 
-| Property     | Description                                                                 |
-|--------------|-----------------------------------------------------------------------------|
-| **id**       | A unique identifier within a set (non-fungible only)                        |
-| **owner**    | The address that currently owns the token                                   |
-| **balance**  | Amount held by an address (for fungible or semi-fungible tokens)            |
-| **uri**      | A metadata URI (used in ERC721 and ERC1155 only)                            |
-| **metadata** | Structured metadata stored onchain (unique to object tokens)                |
-| **elements** | Modular components such as matter, values, uniques, and info                |
-| **position** | Logical or spatial location, used for linking and layout                    |
-
-todo:
-add further explanation for metadata, elements, and position
+| Property       | Description                                                        | OPT | OBT |
+|----------------|--------------------------------------------------------------------|-----|-----|
+| **id**         | Unique identifier within a set (non-fungible only)                 | ✓   | ✓   |
+| **owner**      | Current owner of the token                                         | ✓   | ✓   |
+| **balance**    | Quantity owned (for fungible / semi-fungible tokens)               | ✓   | ✓   |
+| **uri**        | External metadata URI                                              | ✓   | —   |
+| **descriptor** | Structured data describing an object's kind, set, and revision     | —   | ✓   |
+| **elements**   | Building blocks of an object: matter, value, unique, and info      | —   | ✓   |
 
 ## Operations
 
-We're already familiar with standard operations like `mint`, `transfer`, and `burn`.
-Object tokens introduce additional operations that support **mutation**, **evolution**, and **interoperation** — all native to the protocol.
+The table below outlines the core operations available to OPTs and OBTs.
 
-| Operation    | Description                                              | Implemented In     | Affected Properties                     |
-|--------------|----------------------------------------------------------|--------------------|------------------------------------------|
-| **mint**     | Create a new object from a set                           | Token Contract      | `owner`, `metadata`, `elements`         |
-| **transfer** | Change the ownership of an object                        | Token Contract      | `owner`                                  |
-| **burn**     | Permanently remove an object                             | Token Contract      | `owner`, `metadata`                      |
-| **update**   | Modify an object’s metadata or elements                  | Token Contract      | `metadata`, `elements`                   |
-| **upgrade**  | Apply kind-defined upgrades to the object                | Token Contract      | `metadata`                               |
-| **relate**   | Establish a relation between objects                     | Omni Registry       | `position`                               |
-| **unrelate** | Remove a relation between objects                        | Omni Registry       | `position`                               |
-| **move**     | Change an object’s spatial or logical position           | Omni Registry       | `position`                               |
-## Assets
+| Operation      | Description                                      | OPT | OBT |
+|----------------|--------------------------------------------------|-----|-----|
+| **transfer**   | Changes ownership of a token                     | ✓   | ✓   |
+| **update**     | Modifies an object's elements                    | —   | ✓   |
+| **upgrade**    | Applies a newer revision of its kind or set      | —   | ✓   |
+| **relate**     | Connect an object to another                     | —   | ✓   |
+| **unrelate**   | Disconnect an object from another                | —   | ✓   |
 
-For traditional non-fungible tokens (NFTs), the associated assets are referenced via a uri. These URIs may point to IPFS, Arweave, or even centralized servers — but the assets themselves are not guaranteed to be verifiable or secure.
+## Descriptor
 
-Object Tokens take a fundamentally different approach.
+A descriptor is a structured record that defines an object's kind, set, and current revision.
 
-Instead of pointing to static external files, assets in Every Protocol are dynamically generated using the object’s metadata.rev, kind, set, and an associated Kind Contract. This makes assets not only programmable, but also publicly verifiable.
+```solidity
+struct Descriptor {
+    uint32 flags; // reserved
+    uint32 rev;   // current revision of the object
+    uint32 krev;  // kind revision under which this object operates
+    uint32 srev;  // set revision under which this object operates
+    uint64 kind;  // kind ID this object belongs to
+    uint64 set;   // set ID from which this object is minted
+}
+```
 
-An object’s assets can be seen as projections of the object from different perspectives, each one computed via a facet function in the kind contract. These computed views are called facet images.
+The entire descriptor fits within a single `bytes32` (256 bits).
+
+## Elements
+
+Elements are the building blocks of an object. There are four types: **matter**, **value**, **unique**, and **info**. These will be explained in the next chapter.
+
+For now, each element is encoded as a `bytes32` (256 bits). All elements of an object are typically emitted as a `bytes32[]` in set contract events:
+
+```solidity
+bytes32[] elems
+```
+
+An object can have anywhere from 0 to 16 elements.
+
+## Set Contract
+
+The token contracts for object tokens are called **set contracts**. 
+
+The interface of a set contract is as follows:
+
+```solidity
+interface ISet {
+    event Created(uint64 id, Descriptor desc, bytes32[] elems, address owner);
+    event Updated(uint64 id, Descriptor desc, bytes32[] elems);
+    event Upgraded(uint64 id, Descriptor desc);
+    event Touched(uint64 id, Descriptor desc);
+    event Destroyed(uint64 id, Descriptor desc);
+    event Transferred(uint64 id, Descriptor desc, address from, address to);
+
+    function upgrade(uint64 id, uint32 krev0, uint32 srev0) external returns (Descriptor memory desc);
+    function touch(uint64 id) external returns (Descriptor memory desc);
+    function transfer(uint64 id, address to) external;
+
+    function owner(uint64 id) external view returns (address);
+    function descriptor(uint64 id, uint32 rev0) external view returns (Descriptor memory desc);
+    function snapshot(uint64 id, uint32 rev0) external view returns (Descriptor memory desc, bytes32[] memory elems);
+    function uri() external view returns (string memory);
+}
+```
+
+## Object Assets
+
+Assets for **OPTs** are typically hosted on distributed storage networks such as IPFS or Arweave, or sometimes even on centralized servers. This makes them either static or vulnerable to issues arising from centralized hosting (availability loss, tampering, broken links, and so on).
+
+Assets for **OBTs** are generated onchain by executing the object’s kind contract. The contract uses the object’s descriptor and elements—along with any data shared by its kind or set—to produce the final assets.
+
+These assets can be retrieved through an Every Network gateway. Because the computation is deterministic and publicly verifiable, any client can recompute and verify authenticity. This removes the risks of external hosting and allows assets to be used safely and trustlessly in richer applications.
+
+The asset-producing functions in a kind contract are called **facet functions**. The table below shows a typical set of facets used to generate OPT-compatible assets:
+
+| facet function | facet selector | facet asset URL                                    |
+|----------------|----------------|----------------------------------------------------|
+| **meta()**     | `0x0144b03a`   | `http://every.lo/object/31337.22.3/1/0x0144b03a` |
+| **picture()**  | `0xeb0568a6`   | `http://every.lo/object/31337.22.3/1/0xeb0568a6` |
+
+:::info
+The `http://every.lo` URLs shown here are gateways for a localnet instance.  
+See [endpoints](network/endpoints) for the complete list of available gateways.
+:::

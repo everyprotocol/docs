@@ -25,20 +25,16 @@ export default defineConfig({
 
       items: [
         {
+          text: "Status Page",
+          link: "https://status.every.fun",
+        },
+        {
           text: "Developer Portal",
           link: "https://portal.every.fun",
         },
         {
-          text: "Object Explorer",
-          link: "https://each.so",
-        },
-        {
-          text: "Faucet",
+          text: "Testnet Faucet",
           link: "https://faucet.every.fun",
-        },
-        {
-          text: "Status Page",
-          link: "https://status.every.fun",
         },
         {
           text: "Contract Addresses",
@@ -50,14 +46,26 @@ export default defineConfig({
           link: "/docs/network/endpoints",
           match: "__undefined__",
         },
+        {
+          text: "Object Explorer",
+          link: "https://each.so",
+        },
       ],
     },
     {
       text: "Reference",
       items: [
         {
-          text: "Everything Theory",
-          link: "https://theory.every.fun/",
+          text: "Core Contracts",
+          link: "https://core.every.fun/",
+        },
+        {
+          text: "Periphery Contracts",
+          link: "https://periphery.every.fun/",
+        },
+        {
+          text: "every",
+          link: "/docs/reference/every-cli",
         },
         {
           text: "kind-as",
@@ -68,17 +76,8 @@ export default defineConfig({
           link: "/docs/reference/kasc",
         },
         {
-          text: "every",
-          link: "/docs/reference/every-cli",
-        },
-        {
-          text: "Core Contracts",
-          link: "https://core.every.fun/",
-        },
-
-        {
-          text: "Periphery Contracts",
-          link: "https://periphery.every.fun/",
+          text: "Everything Theory",
+          link: "https://theory.every.fun/",
         },
       ],
     },
